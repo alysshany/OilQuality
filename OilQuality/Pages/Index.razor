@@ -1,0 +1,105 @@
+﻿@page "/"
+
+<PageTitle>Авторизация</PageTitle>
+
+@*<SurveyPrompt Title="How is Blazor working for you?" />*@
+@*<img src='/css/background.png' style="position: absolute; left: 0px; top: 0px; object-fit: fill">*@
+
+@*<MudAppBar Style="margin-top: 2%; position: absolute; width: 90%; left: 50%; transform: translate(-50%, 0); border-radius: 20px; background-color: white; box-shadow: none;">
+    <MudButton>
+        Главная страница
+    </MudButton>
+</MudAppBar>*@
+
+
+@*<img src='/css/Cover.png' style="position: absolute; left: 0px; top: 0px; object-fit: fill; width: 20%">*@
+
+
+<div>
+    <div class="mainblock">
+        <div style="flex: 50%;">
+            <img src='/css/Mesh-20.png' style="width: 98%">
+        </div>
+        <div style="flex: 50%; padding: 3%;">
+            <label>
+                Авторизоваться
+            </label>
+            <label class="labelStyle">
+                Логин
+            </label>
+            <input @bind-value="login" type="text" placeholder="Введите логин" class="inputStyle">
+            <br />
+            <br />
+            <label class="labelStyle">
+                Пароль
+            </label>
+            <input @bind-value="password" type="password" placeholder="Введите пароль" class="inputStyle">
+            <button class="buttonStyle">
+                <b class="bStyleButton">
+                    Войти
+                </b>
+            </button>
+        </div>
+    @*    <label class="labelStyle">
+            Логин
+        </label>
+        <input @bind-value="login" type="text" placeholder="Введите логин" class="inputStyle">
+        <br />
+        <br />
+        <label class="labelStyle">
+            Пароль
+        </label>
+        <input @bind-value="password" type="password" placeholder="Введите пароль" class="inputStyle">*@
+
+
+    </div>
+</div>
+
+@code{
+    string? login;
+    string? password;
+}
+
+<style>
+
+    .labelStyle {
+        letter-spacing: 0;
+        text-transform: none;
+        text-align: left;
+        vertical-align: middle;
+        
+        font-size: 28px;
+        color: rgba(255, 255, 255, 1);
+        font-weight: 400;
+        width: 100%
+    }
+
+    .inputStyle {
+        box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.5);
+        font-size: 20px;
+        background-color: rgb(233, 231, 254);
+        width: 80%;
+        font-family: Playfair Display;
+        mix-blend-mode: normal;
+        border-top-left-radius: 10px;
+        border-top-right-radius: 10px;
+        border-bottom-left-radius: 10px;
+        border-bottom-right-radius: 10px;
+        align-items: inherit;
+        border-radius: 10px
+    }
+    .mainblock{
+        display: flex;
+        box-shadow: rgb(38, 57, 77) 0px 20px 30px -10px;
+        position: absolute;
+        left: 20%;
+        top: 600%;
+        align-self: center;
+        width: 60%;
+        opacity: 1;
+        mix-blend-mode: normal;
+        background-color: rgba(255, 255, 255, 1);
+        align-items: flex-start;
+        justify-content: flex-start
+    }
+</style>
