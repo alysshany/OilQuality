@@ -1,8 +1,14 @@
 @import url('open-iconic/font/css/open-iconic-bootstrap.min.css');
 
+@font-face {
+    font-family: Montserrat;
+    src: url('../css/open-iconic/font/fonts/Montserrat-VariableFont_wght.ttf') format('truetype');
+}
+
 html, body {
-    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    /*font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;*/
     background-color: rgba(249, 247, 248, 1);
+    font-family: Montserrat;
 }
 
 h1:focus {

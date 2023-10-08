@@ -1,0 +1,56 @@
+﻿@page "/worker"
+
+
+<MudAppBar Style="margin-top: 2%; position: absolute; width: 90%; left: 50%; transform: translate(-50%, 0); background-color: white; box-shadow: rgb(38, 57, 77) 0px 20px 30px -10px;;">
+    <MudButton>
+        Главная страница
+    </MudButton>
+    <MudButton>
+        Заявки
+    </MudButton>
+</MudAppBar>
+
+<div class="boxFive">
+    <label>
+        Число выполненных задач:
+    </label>
+</div>
+@*<img src='/images/img1.jpg' class="imageOne">*@
+<div class="boxSix"></div>
+@*<img src='/images/img2.jpg' class="imageTwo">*@
+
+@code {
+
+}
+
+<style>
+    .boxSix {
+        box-shadow: rgb(38, 57, 77) 0px 20px 30px -10px;
+        position: absolute;
+        left: 37%;
+        transform: translate(-63%, 25%);
+        opacity: 1;
+        width: 28%;
+        height: 800%;
+        mix-blend-mode: normal;
+        align-items: inherit;
+        gap: 10px;
+        align-items: flex-start;
+        justify-content: flex-start
+    }
+
+    .boxFive {
+        box-shadow: rgb(38, 57, 77) 0px 20px 30px -10px;
+        position: absolute;
+        left: 70%;
+        transform: translate(-30%, 125%);
+        opacity: 1;
+        width: 30%;
+        height: 800%;
+        mix-blend-mode: normal;
+        align-items: inherit;
+        gap: 10px;
+        align-items: flex-start;
+        justify-content: flex-start
+    }
+</style>

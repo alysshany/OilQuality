@@ -20,38 +20,33 @@
         <div style="flex: 50%;">
             <img src='/css/Mesh-20.png' style="width: 98%">
         </div>
-        <div style="flex: 50%; padding: 3%;">
-            <label>
-                Авторизоваться
-            </label>
-            <label class="labelStyle">
-                Логин
-            </label>
-            <input @bind-value="login" type="text" placeholder="Введите логин" class="inputStyle">
-            <br />
-            <br />
-            <label class="labelStyle">
-                Пароль
-            </label>
-            <input @bind-value="password" type="password" placeholder="Введите пароль" class="inputStyle">
-            <button class="buttonStyle">
-                <b class="bStyleButton">
-                    Войти
-                </b>
-            </button>
+        <div style="flex: 50%; padding: 3%; justify-content: center;  align-items: center;">
+            <div >
+                <br/>
+                <div style="text-align: center">
+                    <label >
+                        АВТОРИЗАЦИЯ
+                    </label>
+                </div>
+                <br />
+                <label >
+                    Логин
+                </label>
+                <br />
+                <input @bind-value="login" type="text" placeholder="Введите логин" class="inputStyle">
+                <br />
+                <br />
+                <label >
+                    Пароль
+                </label>
+                <br />
+                <input @bind-value="password" type="password" placeholder="Введите пароль" class="inputStyle">
+                <br />
+                <div style="justify-content: center;  align-items: center;">
+                    <MudButton Variant="Variant.Outlined" Color="Color.Info" >Войти</MudButton>
+                </div>
+            </div>
         </div>
-    @*    <label class="labelStyle">
-            Логин
-        </label>
-        <input @bind-value="login" type="text" placeholder="Введите логин" class="inputStyle">
-        <br />
-        <br />
-        <label class="labelStyle">
-            Пароль
-        </label>
-        <input @bind-value="password" type="password" placeholder="Введите пароль" class="inputStyle">*@
-
-
     </div>
 </div>
 
@@ -69,37 +64,31 @@
         vertical-align: middle;
         
         font-size: 28px;
-        color: rgba(255, 255, 255, 1);
+        color: black;
         font-weight: 400;
         width: 100%
     }
 
     .inputStyle {
         box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.5);
-        font-size: 20px;
-        background-color: rgb(233, 231, 254);
+        font-size: 22px;
         width: 80%;
         font-family: Playfair Display;
         mix-blend-mode: normal;
-        border-top-left-radius: 10px;
-        border-top-right-radius: 10px;
-        border-bottom-left-radius: 10px;
-        border-bottom-right-radius: 10px;
         align-items: inherit;
-        border-radius: 10px
     }
     .mainblock{
         display: flex;
         box-shadow: rgb(38, 57, 77) 0px 20px 30px -10px;
         position: absolute;
         left: 20%;
-        top: 600%;
+        top: 700%;
         align-self: center;
         width: 60%;
         opacity: 1;
         mix-blend-mode: normal;
         background-color: rgba(255, 255, 255, 1);
-        align-items: flex-start;
-        justify-content: flex-start
+        align-items: center;
+        justify-content: center;
     }
 </style>
