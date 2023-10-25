@@ -1,16 +1,122 @@
 ﻿@page "/manager"
+@using OilQuality.Data;
 
-<MudAppBar Style="margin-top: 2%; position: absolute; width: 90%; left: 50%; transform: translate(-50%, 0); background-color: white; box-shadow: rgb(38, 57, 77) 0px 20px 30px -10px;;">
+<MudAppBar Style="margin-top: 2%; position: absolute; width: 90%; left: 50%; transform: translate(-50%, 0); background-color: white; box-shadow: rgb(38, 57, 77) 0px 20px 30px -10px; align-items: center;">
     <MudButton>
         Главная страница
     </MudButton>
-    <MudButton>
+    <MudButton Href="/allanalyzelist">
         Выполненные анализы
+    </MudButton>
+    <MudButton Href="/managerequiplist">
+        Оборудование
     </MudButton>
 </MudAppBar>
 
-<MudPaper Class="pa-16 ma-2" Elevation="3"></MudPaper>
+@*<MudPaper Class="pa-16 ma-2" Elevation="3"></MudPaper>
+*@
+
+<div class="mainblock">
+    <div style="width: 49%; height: 49%; box-shadow: rgb(38, 57, 77) 0px 5px 10px -0px;">
+        <img src='/css//Mesh-20.png' style="width: 100%; height:100%; object-fit: cover; overflow: hidden">
+    </div>
+    <div style="background-color: white; width: 49%; height: 49%; box-shadow: rgb(38, 57, 77) 0px 5px 10px -0px; align-items: center">
+@*        <div class="d-flex mx-auto">
+            <MudButton Variant="Variant.Outlined" Color="Color.Info" Style="width: 40%; margin: 5px" Class="d-flex mx-auto">Выдать задание</MudButton>
+            <MudButton Variant="Variant.Outlined" Color="Color.Info" Style="width: 40%; margin: 5px" Class="d-flex mx-auto">Выдать задание</MudButton>
+        </div>*@
+        <MudPaper style=" margin: 5px; width: 20%; box-shadow: rgb(38, 57, 77) 0px 5px 10px -0px; padding: 8px; ">
+            <MudText style="text-align:center;">
+                Анализы
+            </MudText>
+            <MudText style="text-align:center; ">
+                <label style="color: rgba(118, 230, 153, 1)">@analyzes</label>
+            </MudText>
+            <MudText style="text-align:center;">
+                Заявки
+            </MudText>
+            <MudText style="text-align:center; margin-right: 5px">
+                <label style="color: rgba(242, 105, 159, 1)">@requests</label>
+            </MudText>
+            <MudText style="text-align:center;">
+                Сотрудники
+            </MudText>
+            <MudText style="text-align:center; margin-right: 5px">
+                <label style="color: rgba(245, 166, 35, 1)">@users</label>
+            </MudText>
+        </MudPaper>
+@*        <MudText> 
+            Количество выполненных анализов:  @analyzes
+        </MudText>
+        <MudText>
+            Количество открытых заявок: @requests
+        </MudText>
+        <MudText>
+            Количество сотрудников: @users
+        </MudText>*@
+        <br />
+        <MudButton Variant="Variant.Outlined" Color="Color.Info" Style="width: 40%; margin: 5px" Class="d-flex mx-auto">Выдать задание</MudButton>
+    </div>
+    <div style="background-color: white; width: 49%; height: 49%; box-shadow: rgb(38, 57, 77) 0px 5px 10px -0px;">
+        hhfdkdfdj
+    </div>
+    <div style="width: 49%; height: 49%; box-shadow: rgb(38, 57, 77) 0px 5px 10px -0px;">
+        <img src='/css//Mesh-20.png' style="width: 100%; height:100%; object-fit: cover; overflow: hidden">
+    </div>
+</div>
+
+@*<div class="boxFive">
+    <label>
+        Число выполненных задач:
+    </label>
+    <br />
+    <label>
+        Число открытых заявок:
+    </label>
+</div>*@
 
 @code {
+    private IEnumerable<Analyze> ListOfAnalyzes = new List<Analyze>();
+    private int analyzes;
+    private IEnumerable<Analyze> ListOfRequests = new List<Analyze>();
+    private int requests;
+    private IEnumerable<User> ListOfUsers = new List<User>();
+    private int users;
 
+    DateTime? date = null;
+    string dateFormat = "dd.MM.yyyy";
+
+    public List<int> dataList = new List<int>();
+    public List<string> labelsList = new List<string>();
+    public string[] labels = new string[] { };
+    public double[] data = new double[] { };
+
+    protected override void OnInitialized()
+    {
+        ListOfAnalyzes = DBConnection.ImportOnlyAnalyzes();
+        analyzes = ListOfAnalyzes.Count();
+        ListOfRequests = DBConnection.ImportOnlyApplications();
+        requests = ListOfRequests.Count();
+        ListOfUsers = DBConnection.ImportAllLabWorkers();
+        users = ListOfUsers.Count();
+    }
 }
+
+<style>
+    .mainblock {
+        display: flex;
+        box-shadow: rgb(38, 57, 77) 0px 20px 30px -10px;
+        position: absolute;
+        left: 15%;
+        gap: 2%;
+        top: 700%;
+        width: 70%;
+        height: 3100%;
+        opacity: 1;
+        mix-blend-mode: normal;
+        background-color: rgba(255, 255, 255, 1);
+        flex-direction: row;
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+</style>

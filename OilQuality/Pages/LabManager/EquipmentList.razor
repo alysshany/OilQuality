@@ -1,0 +1,90 @@
+﻿@page "/managerequiplist"
+@using OilQuality.Data;
+
+<MudAppBar Style="margin-top: 2%; position: absolute; width: 90%; left: 50%; transform: translate(-50%, 0); background-color: white; box-shadow: rgb(38, 57, 77) 0px 20px 30px -10px; align-items: center;">
+    <MudButton>
+        Главная страница
+    </MudButton>
+    <MudButton Href="/allanalyzelist">
+        Выполненные анализы
+    </MudButton>
+    <MudButton Href="/managerequiplist">
+        Оборудование
+    </MudButton>
+</MudAppBar>
+
+<div class="mainblock">
+    <div style="flex: 50%; ">
+        <MudTable Items="@equipment" Filter="new Func<Equipment,bool>(FilterFunc1)" @bind-SelectedItem="selectedItem1">
+            <ToolBarContent>
+                <MudText Typo="Typo.h6">Оборудование</MudText>
+                <MudSpacer />
+                <MudTextField @bind-Value="searchString1" Placeholder="Search" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0"></MudTextField>
+                <MudSpacer />
+                <MudButton Variant="Variant.Outlined" Href="/equipment">Добавить</MudButton>
+            </ToolBarContent>
+            <HeaderContent>
+                <MudTh>Название</MudTh>
+                <MudTh>Начало эксплуатации</MudTh>
+                <MudTh>Конец эксплуатации</MudTh>
+                <MudTh>Просмотреть</MudTh>
+                @*                <MudTh>Position</MudTh>
+                <MudTh>Molar mass</MudTh>*@
+            </HeaderContent>
+            <RowTemplate>
+                <MudTd DataLabel="Название">@context.Title</MudTd>
+                <MudTd DataLabel="Начало эксплуатации">@context.DateBegin</MudTd>
+                <MudTd DataLabel="Конец эксплуатации">@context.DateEnd</MudTd>
+                <MudTd DataLabel="Просмотреть"><MudButton Variant="Variant.Outlined" Color="Color.Info">Просмотр</MudButton></MudTd>
+            </RowTemplate>
+            @*            <PagerContent>
+            <MudTablePager />
+            </PagerContent>*@
+        </MudTable>
+    </div>
+    <div style="flex: 49%;">
+        <img src='/css//Mesh-20.png' style="width: 100%; height:100%; object-fit: cover; overflow: hidden; box-shadow: rgb(38, 57, 77) 0px 20px 30px -10px;">
+    </div>
+</div>
+
+@code {
+    List<Equipment> equipment;
+    private string searchString1 = "";
+    private Equipment selectedItem1 = null;
+    private HashSet<Equipment> selectedItems = new HashSet<Equipment>();
+
+    protected override void OnInitialized()
+    {
+        equipment = DBConnection.ImportAllEquipments();
+    }
+
+    private bool FilterFunc1(Equipment element) => FilterFunc(element, searchString1);
+
+    private bool FilterFunc(Equipment element, string searchString)
+    {
+        if (string.IsNullOrWhiteSpace(searchString))
+            return true;
+        if (element.Title.Contains(searchString, StringComparison.OrdinalIgnoreCase))
+            return true;
+        //if (element.DateBegin.Contains(searchString, StringComparison.OrdinalIgnoreCase))
+        //    return true;
+        //if ($"{element.DateEnd}".Contains(searchString))
+        //    return true;
+        return false;
+    }
+}
+
+<style>
+    .mainblock {
+        display: flex;
+        box-shadow: rgb(38, 57, 77) 0px 20px 30px -10px;
+        position: absolute;
+        left: 15%;
+        top: 700%;
+        width: 70%;
+        height: 3100%;
+        flex-direction: row;
+        justify-content: center;
+        align-self: center;
+    }
+</style>

@@ -1,51 +1,39 @@
 ﻿@page "/"
+@using OilQuality.Data;
+@inject ISnackbar Snackbar
+@inject CurrentUser currentUser;
+@inject NavigationManager navigation;
 
 <PageTitle>Авторизация</PageTitle>
-
-@*<SurveyPrompt Title="How is Blazor working for you?" />*@
-@*<img src='/css/background.png' style="position: absolute; left: 0px; top: 0px; object-fit: fill">*@
-
-@*<MudAppBar Style="margin-top: 2%; position: absolute; width: 90%; left: 50%; transform: translate(-50%, 0); border-radius: 20px; background-color: white; box-shadow: none;">
-    <MudButton>
-        Главная страница
-    </MudButton>
-</MudAppBar>*@
-
-
-@*<img src='/css/Cover.png' style="position: absolute; left: 0px; top: 0px; object-fit: fill; width: 20%">*@
 
 
 <div>
     <div class="mainblock">
         <div style="flex: 50%;">
-            <img src='/css/Mesh-20.png' style="width: 98%">
+            <img src='/css/Mesh-20.png' style="width: 99%; object-fit: fill">
         </div>
-        <div style="flex: 50%; padding: 3%; justify-content: center;  align-items: center;">
-            <div >
-                <br/>
-                <div style="text-align: center">
-                    <label >
-                        АВТОРИЗАЦИЯ
-                    </label>
-                </div>
-                <br />
-                <label >
-                    Логин
-                </label>
-                <br />
-                <input @bind-value="login" type="text" placeholder="Введите логин" class="inputStyle">
-                <br />
-                <br />
-                <label >
-                    Пароль
-                </label>
-                <br />
-                <input @bind-value="password" type="password" placeholder="Введите пароль" class="inputStyle">
-                <br />
-                <div style="justify-content: center;  align-items: center;">
-                    <MudButton Variant="Variant.Outlined" Color="Color.Info" >Войти</MudButton>
-                </div>
+        <div style="flex: 50%; padding: 3%; align-self: center">
+            <div style="text-align: center">
+                <MudText Style=" font-family: 'Mongolian Baiti'; font-size: 24px;">
+                    АВТОРИЗАЦИЯ
+                </MudText>
             </div>
+            <br />
+            <br />
+            <MudText Style=" font-family: 'Mongolian Baiti'; margin: 0">
+                Логин
+            </MudText>
+            <MudTextField T="String" Variant="Variant.Text" Style="font-size: 16px; margin: 0" @bind-Value="@login" />
+            <br />
+            <MudText Style=" font-family: 'Mongolian Baiti'; margin: 0">
+                Пароль
+            </MudText>
+            <MudTextField T="String" Variant="Variant.Text" Style="font-size: 16px; margin: 0" @bind-Value="@password" />
+            <br />
+            <br />
+            <br />
+            <MudButton Variant="Variant.Outlined" Color="Color.Info" Style="width: 40%; font-size: 16px" Class="d-flex mx-auto" OnClick="Login">Войти</MudButton>
+                
         </div>
     </div>
 </div>
@@ -53,6 +41,42 @@
 @code{
     string? login;
     string? password;
+
+    public void Login()
+    {
+        if (login != null && password != null)
+        {
+            var user = DBConnection.FindUserByLogin(login);
+
+            if (user != null && user.Password == password)
+            {
+                currentUser.CurrentUserData = user;
+
+                Snackbar.Add("Успешно", Severity.Success);
+
+                switch (currentUser.CurrentUserData.RoleName)
+                {
+                    case "Администратор":
+                        navigation.NavigateTo("/admin");
+                        break;
+                    case "Лаборант":
+                        navigation.NavigateTo("/worker");
+                        break;
+                    case "Заведующий":
+                        navigation.NavigateTo("/manager");
+                        break;
+                }
+            }
+            else
+            {
+                Snackbar.Add("Пользователя с такими данными не существует.", Severity.Error);
+            }
+        }
+        else
+        {
+            Snackbar.Add("Заполните все поля.", Severity.Error);
+        }
+    }
 }
 
 <style>
@@ -62,8 +86,8 @@
         text-transform: none;
         text-align: left;
         vertical-align: middle;
-        
-        font-size: 28px;
+        /*
+        font-size: 28px;*/
         color: black;
         font-weight: 400;
         width: 100%
@@ -71,7 +95,7 @@
 
     .inputStyle {
         box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.5);
-        font-size: 22px;
+        /*font-size: 22px;*/
         width: 80%;
         font-family: Playfair Display;
         mix-blend-mode: normal;

@@ -1,37 +1,133 @@
 ﻿@page "/worker"
 
 
-<MudAppBar Style="margin-top: 2%; position: absolute; width: 90%; left: 50%; transform: translate(-50%, 0); background-color: white; box-shadow: rgb(38, 57, 77) 0px 20px 30px -10px;;">
+<MudAppBar Style="margin-top: 2%; position: absolute; width: 90%; left: 50%; transform: translate(-50%, 0); background-color: white; box-shadow: rgb(38, 57, 77) 0px 20px 30px -10px; align-items: center;">
     <MudButton>
         Главная страница
     </MudButton>
-    <MudButton>
+    <MudButton Href="/requestlist">
         Заявки
+    </MudButton>
+    <MudButton>
+        Выполненные анализы
+    </MudButton>
+    <MudButton>
+        Оборудование
     </MudButton>
 </MudAppBar>
 
-<div class="boxFive">
+<div class="mainblock">
+    <div style="width: 49%; height: 49%; box-shadow: rgb(38, 57, 77) 0px 5px 10px -0px;">
+        <img src='/css//Mesh-20.png' style="width: 100%; height:100%; object-fit: cover; overflow: hidden">
+    </div>
+    <div style="background-color: white; width: 49%; height: 49%; box-shadow: rgb(38, 57, 77) 0px 5px 10px -0px;">
+        <label>
+            Число выполненных задач:
+        </label>
+        <br />
+        <label>
+            Число открытых заявок:
+        </label>
+    </div>
+    <div style="background-color: white; width: 49%; height: 49%; box-shadow: rgb(38, 57, 77) 0px 5px 10px -0px;">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th class="thStyle">Задание</th>
+                    <th class="thStyle">Выполнение</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var task in tasks)
+                {
+                    <tr>
+                        <td class="tdStyle">@task.TaskInfo</td>
+                        <td class="tdStyle"><input type="checkbox" checked="@task.isDone"><label></label></td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+    <div style="width: 49%; height: 49%; box-shadow: rgb(38, 57, 77) 0px 5px 10px -0px;">
+        <img src='/css//Mesh-20.png' style="width: 100%; height:100%; object-fit: cover; overflow: hidden">
+    </div>
+</div>
+
+@*<div class="boxFive">
     <label>
         Число выполненных задач:
     </label>
+    <br />
+    <label>
+        Число открытых заявок:
+    </label>
 </div>
 @*<img src='/images/img1.jpg' class="imageOne">*@
+
+@*<img src='/img/img3.jpg' class="imageOne">
+
+
 <div class="boxSix"></div>
-@*<img src='/images/img2.jpg' class="imageTwo">*@
+<img src='/img/img2.jpg' class="imageTwo">*@
 
 @code {
-
+    List<Data.Task> tasks = new List<Data.Task>();
 }
 
 <style>
-    .boxSix {
+    .imageOne {
+        box-shadow: rgb(38, 57, 77) 0px 5px 10px -0px;
+        position: absolute;
+        left: 35%;
+        transform: translate(-65%,45%);
+        opacity: 1;
+        width: 30%;
+        height: 1500%;
+        mix-blend-mode: normal;
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+    }
+
+    .mainblock {
+        display: flex;
         box-shadow: rgb(38, 57, 77) 0px 20px 30px -10px;
         position: absolute;
-        left: 37%;
-        transform: translate(-63%, 25%);
+        left: 15%;
+        gap: 2%;
+        top: 700%;
+        width: 70%;
+        height: 3100%;
+        opacity: 1;
+        mix-blend-mode: normal;
+        background-color: rgba(255, 255, 255, 1);
+        flex-direction: row;
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+
+    .imageTwo {
+        box-shadow: rgb(38, 57, 77) 0px 20px 30px -10px;
+        position: absolute;
+        left: 39%;
+        transform: translate(-61%, 10%);
         opacity: 1;
         width: 28%;
-        height: 800%;
+        height: 1500%;
+        mix-blend-mode: normal;
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+    }
+
+    .boxSix {
+        box-shadow: rgb(38, 57, 77) 0px 5px 10px -0px;
+        position: absolute;
+        left: 35%;
+        transform: translate(-65%, 65%);
+        opacity: 1;
+        width: 30%;
+        height: 1500%;
         mix-blend-mode: normal;
         align-items: inherit;
         gap: 10px;
@@ -40,7 +136,7 @@
     }
 
     .boxFive {
-        box-shadow: rgb(38, 57, 77) 0px 20px 30px -10px;
+        box-shadow: rgb(38, 57, 77) 0px 5px 10px -0px;
         position: absolute;
         left: 70%;
         transform: translate(-30%, 125%);

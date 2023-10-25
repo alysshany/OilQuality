@@ -1,0 +1,92 @@
+﻿@page "/allanalyzelist"
+@using Data;
+
+<MudAppBar Style="margin-top: 2%; position: absolute; width: 90%; left: 50%; transform: translate(-50%, 0); background-color: white; box-shadow: rgb(38, 57, 77) 0px 20px 30px -10px; align-items: center;">
+    <MudButton>
+        Главная страница
+    </MudButton>
+    <MudButton Href="/allanalyzelist">
+        Выполненные анализы
+    </MudButton>
+    <MudButton Href="/managerequiplist">
+        Оборудование
+    </MudButton>
+</MudAppBar>
+
+<div class="mainblock">
+    <div style="flex: 50%; ">
+        <MudTable Items="@workers" Filter="new Func<Analyze,bool>(FilterFunc1)" @bind-SelectedItem="selectedItem1">
+            <ToolBarContent>
+                <MudText Typo="Typo.h6">Сотрудники</MudText>
+                <MudSpacer />
+                <MudTextField @bind-Value="searchString1" Placeholder="Search" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0"></MudTextField>
+                <MudSpacer />
+                <MudButton Variant="Variant.Outlined">Добавить</MudButton>
+            </ToolBarContent>
+            <HeaderContent>
+                <MudTh>Номер</MudTh>
+                <MudTh>Тип</MudTh>
+                <MudTh>Месторождение</MudTh>
+                <MudTh>Просмотреть</MudTh>
+                @*                <MudTh>Position</MudTh>
+                <MudTh>Molar mass</MudTh>*@
+            </HeaderContent>
+            <RowTemplate>
+                <MudTd DataLabel="Номер">@context.Title</MudTd>
+                <MudTd DataLabel="Тип">@context.Type</MudTd>
+                <MudTd DataLabel="Месторождение">@context.Deposit</MudTd>
+                <MudTd DataLabel="Просмотреть"><MudButton Variant="Variant.Outlined" Color="Color.Info">Просмотр</MudButton></MudTd>
+                @*                <MudTd DataLabel="Position">@context.Position</MudTd>
+                <MudTd DataLabel="Molar mass">@context.Molar</MudTd>*@
+            </RowTemplate>
+            @*            <PagerContent>
+            <MudTablePager />
+            </PagerContent>*@
+        </MudTable>
+    </div>
+    <div style="flex: 49%;">
+        <img src='/css//Mesh-20.png' style="width: 100%; height:100%; object-fit: cover; overflow: hidden; box-shadow: rgb(38, 57, 77) 0px 20px 30px -10px;">
+    </div>
+</div>
+
+@code {
+    List<Analyze> workers;
+    private string searchString1 = "";
+    private Analyze selectedItem1 = null;
+    private HashSet<Analyze> selectedItems = new HashSet<Analyze>();
+
+    protected override void OnInitialized()
+    {
+        workers = DBConnection.ImportOnlyAnalyzes();
+    }
+
+    private bool FilterFunc1(Analyze element) => FilterFunc(element, searchString1);
+
+    private bool FilterFunc(Analyze element, string searchString)
+    {
+        if (string.IsNullOrWhiteSpace(searchString))
+            return true;
+        if (element.Title.Contains(searchString, StringComparison.OrdinalIgnoreCase))
+            return true;
+        if (element.Type.Contains(searchString, StringComparison.OrdinalIgnoreCase))
+            return true;
+        if ($"{element.Deposit}".Contains(searchString))
+            return true;
+        return false;
+    }
+}
+
+<style>
+    .mainblock {
+        display: flex;
+        box-shadow: rgb(38, 57, 77) 0px 20px 30px -10px;
+        position: absolute;
+        left: 15%;
+        top: 700%;
+        width: 70%;
+        height: 3100%;
+        flex-direction: row;
+        justify-content: center;
+        align-self: center;
+    }
+</style>

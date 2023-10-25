@@ -1,0 +1,164 @@
+﻿@page "/requestadd"
+@page "/analyze"
+@using OilQuality.Data;
+@inject ISnackbar Snackbar
+@inject NavigationManager navigation;
+
+<MudAppBar Style="margin-top: 2%; position: absolute; width: 90%; left: 50%; transform: translate(-50%, 0); background-color: white; box-shadow: rgb(38, 57, 77) 0px 20px 30px -10px; align-items: center;">
+    <MudButton>
+        Главная страница
+    </MudButton>
+    <MudButton>
+        Заявки
+    </MudButton>
+    <MudButton>
+        Выполненные анализы
+    </MudButton>
+    <MudButton>
+        Оборудование
+    </MudButton>
+</MudAppBar>
+
+<div class="mainblock">
+    <div style="width: 50%; height: 80%; align-self: center; margin: 15px">
+        <img src='/css//Mesh-20.png' style="width: 100%; height:100%; object-fit: cover; overflow: hidden; box-shadow: rgb(38, 57, 77) 0px 20px 30px -10px;">
+    </div>
+    <div style="width: 50%; margin: 25px; padding: 25px; ">
+        <MudText Style="font-size: 18px; text-align: center; margin: 10px">
+            Заявка на анализ
+        </MudText>
+        <MudText Style="font-size: 16px">
+            Номер:
+        </MudText>
+        <MudTextField T="String" Variant="Variant.Text" Style="font-size: 16px; margin: 0" @bind-Value="@surname" />
+        <MudText Style="font-size: 16px">
+            Объект исследования:
+        </MudText>
+        <MudTextField T="String" Variant="Variant.Text" Style="font-size: 16px; margin: 0" @bind-Value="@name" />
+        <MudText Style="font-size: 16px">
+            Месторождение:
+        </MudText>
+        <MudTextField T="String" Variant="Variant.Text" Style=" font-size: 16px; margin: 0 " @bind-Value="@patronymic" />
+        <MudText Style="font-size: 16px">
+            Логин:
+        </MudText>
+        <MudTextField T="String" Variant="Variant.Text" Style="font-size: 16px; margin: 0" @bind-Value="@login" />
+        <MudText Style="font-size: 16px">
+            Определяемый показатель:
+        </MudText>
+        <MudTextField T="String" Variant="Variant.Text" Style="font-size: 16px; margin: 0" @bind-Value="@password" />
+        <MudText Style="font-size: 16px; margin: 0">
+            Метод:
+        </MudText>
+        <MudSelect T="String" ValueChanged="value => RoleChange(value)" Style="font-size: 16px; margin: 0">
+            <MudSelectItem Value="@("Администратор")" />
+            <MudSelectItem Value="@("Лаборант")" />
+            <MudSelectItem Value="@("Заведующий")" />
+        </MudSelect>
+
+        <MudButton Variant="Variant.Outlined" Color="Color.Info" Class="d-flex mx-auto" Style="margin: 15px" @onclick="RegistrationLabWorker">
+            Сохранить
+        </MudButton>
+    </div>
+
+</div>
+
+@code {
+    string? surname;
+    string? name;
+    string? patronymic;
+    string? login;
+    string? password;
+    string? role;
+
+    public void RoleChange(string e)
+    {
+        if (e is not null)
+        {
+            role = e;
+        }
+    }
+
+    public void RegistrationLabWorker()
+    {
+        if (surname != null && name != null && login != null &&
+            password != null && role != null && role != "-")
+        {
+            if (DBConnection.FindUserByLogin(login) == null)
+            {
+                User userData = new User()
+                    {
+                        Surname = surname,
+                        Name = name,
+                        Patronymic = patronymic,
+                        Login = login,
+                        Password = password,
+                        RoleName = role
+                    };
+                DBConnection.AddToDataBase(userData);
+
+                Snackbar.Add("Успешно", Severity.Success);
+                navigation.NavigateTo("/admin");
+
+            }
+            else
+            {
+                Snackbar.Add("Пользователь с такими данными уже существует.", Severity.Error);
+            }
+        }
+        else
+        {
+            Snackbar.Add("Не все необходимые поля заполнены.", Severity.Error);
+        }
+    }
+}
+
+<style>
+
+    .buttonThree {
+        box-shadow: rgba(0, 0, 0, 0.25) 0 8px 15px;
+        transform: translateY(-2px);
+        margin: 3%;
+        position: absolute;
+        bottom: 0;
+        right: 0;
+        width: 10%;
+        background-color: white;
+        box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.5);
+        opacity: 1;
+        mix-blend-mode: normal;
+        padding-left: 10px;
+        padding-right: 10px;
+        padding-top: 10px;
+        align-items: inherit;
+        align-items: flex-start;
+        justify-content: flex-start;
+        border-radius: 20px
+    }
+
+    .pStyle {
+        letter-spacing: 0;
+        text-transform: none;
+        text-align: center;
+        vertical-align: middle;
+        font-family: Playfair Display;
+        font-size: 20px;
+        color: rgba(0, 0, 0, 1);
+        font-weight: 400;
+        width: 100%
+    }
+
+    .mainblock {
+        display: flex;
+        box-shadow: rgb(38, 57, 77) 0px 20px 30px -10px;
+        position: absolute;
+        left: 15%;
+        top: 700%;
+        width: 70%;
+        height: 3100%;
+        flex-direction: row;
+        justify-content: center;
+        align-self: center;
+        /*        background-image: url('/css//Mesh-51.png');*/
+    }
+</style>

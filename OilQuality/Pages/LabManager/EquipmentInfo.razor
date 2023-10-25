@@ -1,0 +1,208 @@
+﻿@page "/equipment"
+@page "/equipment/{equipmentId}"
+@using OilQuality.Data;
+@inject ISnackbar Snackbar
+@inject NavigationManager navigation;
+
+<MudAppBar Style="margin-top: 2%; position: absolute; width: 90%; left: 50%; transform: translate(-50%, 0); background-color: white; box-shadow: rgb(38, 57, 77) 0px 20px 30px -10px; align-items: center;">
+    <MudButton Href="/manager">
+        Главная страница
+    </MudButton>
+    <MudButton Href="/allanalyzelist">
+        Выполненные анализы
+    </MudButton>
+    <MudButton Href="/managerequiplist">
+        Оборудование
+    </MudButton>
+</MudAppBar>
+
+<div class="mainblock">
+    <div style="width: 50%; ">
+        <img src='/css//Mesh-20.png' style="width: 100%; height:100%; object-fit: cover; overflow: hidden; box-shadow: rgb(38, 57, 77) 0px 20px 30px -10px;">
+    </div>
+    <div style="width: 50%;  padding: 25px; ">
+        <MudText Style="font-size: 18px; text-align: center; margin: 10px">
+            Оборудование
+        </MudText>
+        <MudText Style="font-size: 16px">
+            Наименование:
+        </MudText>
+        <MudTextField T="String" Variant="Variant.Text" Style="font-size: 16px; margin: 0" @bind-Value="@title" />
+        <MudText Style="font-size: 16px">
+            Дата начала эксплуатации:
+        </MudText>
+        <MudTextField T="DateTime?" Variant="Variant.Text" Style="font-size: 16px; margin: 0" @bind-Value="@dateBegin" />
+        <MudText Style="font-size: 16px">
+            Дата конца эксплуатации:
+        </MudText>
+        <MudTextField T="DateTime?" Variant="Variant.Text" Style=" font-size: 16px; margin: 0 " @bind-Value="@dateEnd" />
+        <MudText Style="font-size: 16px; margin: 0">
+            Ответсвенный:
+        </MudText>
+        <MudSelect T="String" @bind-Value="@workerLogin" Style="font-size: 16px; margin: 0">
+            @foreach (var worker in listOfUsers)
+            {
+                <MudSelectItem Value="@worker.Surname" />
+            }
+        </MudSelect>
+        <MudButton Variant="Variant.Outlined" Color="Color.Info" Class="d-flex mx-auto" Style="margin: 15px" @onclick="RegistrationLabWorker">
+            Сохранить
+        </MudButton>
+    </div>
+
+</div>
+
+@code {
+    string? title;
+    string? workerLogin;
+    DateTime? dateBegin;
+    DateTime? dateEnd;
+    List<User> listOfUsers;
+    Equipment equipment;
+
+    [Parameter]
+    public string? equipmentId { get; set; }
+
+
+    protected override void OnInitialized()
+    {
+        listOfUsers = DBConnection.ImportAllLabWorkers();
+
+        if (equipmentId != null)
+        {
+            //equipment = DBConnection.;
+
+            //surname = user.Surname;
+            //name = user.Name;
+            //patronymic = user.Patronymic;
+            //login = user.Login;
+            //password = user.Password;
+            //role = user.RoleName;
+        }
+    }
+
+    public void RegistrationLabWorker()
+    {
+        if (title != null && dateBegin != null && dateEnd != null && workerLogin != null)
+        {
+            var worker = DBConnection.FindUserByLogin(workerLogin);
+
+            Equipment equipment = new Equipment()
+            {
+                Title = title,
+                User = worker,
+                DateBegin = (DateTime)dateBegin,
+                DateEnd = (DateTime)dateEnd,
+
+            };
+
+            DBConnection.AddEquipmentToDataBase(equipment);
+
+            Snackbar.Add("Оборудование добавлено", Severity.Success);
+
+            navigation.NavigateTo("/manager");
+
+        }
+        else
+        {
+            Snackbar.Add("Не все необходимые поля заполнены.", Severity.Error);
+        }
+        //if (workerLogin != null)
+        //{
+        //    if (surname != null && name != null && password != null)
+        //    {
+        //        DBConnection.ReplaceUser(user);
+
+        //        Snackbar.Add("Изменения сохранены", Severity.Success);
+
+        //        navigation.NavigateTo("/adminViewLabWorker");
+        //    }
+        //    else
+        //    {
+        //        Snackbar.Add("Не все поля заполнены корректно.", Severity.Error);
+        //    }
+        //}
+        //else
+        //{
+        //    if (surname != null && name != null && login != null &&
+        //    password != null && role != null && role != "-")
+        //    {
+        //        if (DBConnection.FindUserByLogin(login) == null)
+        //        {
+        //            User userData = new User()
+        //                {
+        //                    Surname = surname,
+        //                    Name = name,
+        //                    Patronymic = patronymic,
+        //                    Login = login,
+        //                    Password = password,
+        //                    RoleName = role
+        //                };
+        //            DBConnection.AddToDataBase(userData);
+
+        //            Snackbar.Add("Успешно", Severity.Success);
+        //            navigation.NavigateTo("/admin");
+
+        //        }
+        //        else
+        //        {
+        //            Snackbar.Add("Пользователь с такими данными уже существует.", Severity.Error);
+        //        }
+        //    }
+        //    else
+        //    {
+        //        Snackbar.Add("Не все необходимые поля заполнены.", Severity.Error);
+        //    }
+        //}
+    }
+}
+
+<style>
+
+    .buttonThree {
+        box-shadow: rgba(0, 0, 0, 0.25) 0 8px 15px;
+        transform: translateY(-2px);
+        margin: 3%;
+        position: absolute;
+        bottom: 0;
+        right: 0;
+        width: 10%;
+        background-color: white;
+        box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.5);
+        opacity: 1;
+        mix-blend-mode: normal;
+        padding-left: 10px;
+        padding-right: 10px;
+        padding-top: 10px;
+        align-items: inherit;
+        align-items: flex-start;
+        justify-content: flex-start;
+        border-radius: 20px
+    }
+
+    .pStyle {
+        letter-spacing: 0;
+        text-transform: none;
+        text-align: center;
+        vertical-align: middle;
+        font-family: Playfair Display;
+        font-size: 20px;
+        color: rgba(0, 0, 0, 1);
+        font-weight: 400;
+        width: 100%
+    }
+
+    .mainblock {
+        display: flex;
+        box-shadow: rgb(38, 57, 77) 0px 20px 30px -10px;
+        position: absolute;
+        left: 15%;
+        top: 700%;
+        width: 70%;
+        height: 3100%;
+        flex-direction: row;
+        justify-content: center;
+        align-self: center;
+        /*        background-image: url('/css//Mesh-51.png');*/
+    }
+</style>
