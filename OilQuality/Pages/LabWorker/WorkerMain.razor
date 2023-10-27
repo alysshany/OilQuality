@@ -1,17 +1,19 @@
 ﻿@page "/worker"
+@using OilQuality.Data;
+@inject CurrentUser currentUser;
 
 
 <MudAppBar Style="margin-top: 2%; position: absolute; width: 90%; left: 50%; transform: translate(-50%, 0); background-color: white; box-shadow: rgb(38, 57, 77) 0px 20px 30px -10px; align-items: center;">
-    <MudButton>
+    <MudButton Href="/worker">
         Главная страница
     </MudButton>
-    <MudButton Href="/requestlist">
+    <MudButton Href="/requestList">
         Заявки
     </MudButton>
-    <MudButton>
+    <MudButton Href="/myAnalyzeList">
         Выполненные анализы
     </MudButton>
-    <MudButton>
+    <MudButton Href="/workerEquipList">
         Оборудование
     </MudButton>
 </MudAppBar>
@@ -22,15 +24,35 @@
     </div>
     <div style="background-color: white; width: 49%; height: 49%; box-shadow: rgb(38, 57, 77) 0px 5px 10px -0px;">
         <label>
-            Число выполненных задач:
+            Число выполненных заявок: @analyzes
         </label>
         <br />
         <label>
-            Число открытых заявок:
+            Число выполненных мною заявок: @myAnalyzes
+        </label>
+        <br />
+        <label>
+            Число открытых заявок: @requests
         </label>
     </div>
-    <div style="background-color: white; width: 49%; height: 49%; box-shadow: rgb(38, 57, 77) 0px 5px 10px -0px;">
-        <table class="table">
+    <div style="background-color: white; width: 49%; height: 49%; box-shadow: rgb(38, 57, 77) 0px 5px 10px -0px; overflow: scroll;">
+        <MudTable Items="@Elements" @bind-SelectedItem="selectedItem1" Height="auto">
+@*            <ToolBarContent>
+                <MudText Typo="Typo.h6">Periodic Elements</MudText>
+            </ToolBarContent>*@
+            <HeaderContent>
+                <MudTh>Описание</MudTh>
+                <MudTh>Выполнение</MudTh>
+            </HeaderContent>
+            <RowTemplate>
+                <MudTd DataLabel="Описание">@context.TaskInfo</MudTd>
+                <MudTd DataLabel="Выполнение"><MudCheckBox @bind-Checked="@context.isDone" Class="d-flex mx-auto" Color="Color.Info"></MudCheckBox></MudTd>
+            </RowTemplate>
+@*            <PagerContent>
+                <MudTablePager PageSizeOptions="new int[] { 2 }" />
+            </PagerContent>*@
+        </MudTable>
+        @*<table class="table">
             <thead>
                 <tr>
                     <th class="thStyle">Задание</th>
@@ -46,32 +68,37 @@
                     </tr>
                 }
             </tbody>
-        </table>
+        </table>*@
     </div>
     <div style="width: 49%; height: 49%; box-shadow: rgb(38, 57, 77) 0px 5px 10px -0px;">
         <img src='/css//Mesh-20.png' style="width: 100%; height:100%; object-fit: cover; overflow: hidden">
     </div>
 </div>
 
-@*<div class="boxFive">
-    <label>
-        Число выполненных задач:
-    </label>
-    <br />
-    <label>
-        Число открытых заявок:
-    </label>
-</div>
-@*<img src='/images/img1.jpg' class="imageOne">*@
-
-@*<img src='/img/img3.jpg' class="imageOne">
-
-
-<div class="boxSix"></div>
-<img src='/img/img2.jpg' class="imageTwo">*@
-
 @code {
     List<Data.Task> tasks = new List<Data.Task>();
+    private IEnumerable<Analyze> ListOfAnalyzes = new List<Analyze>();
+    private int analyzes;
+    private IEnumerable<Analyze> ListOfMyAnalyzes = new List<Analyze>();
+    private int myAnalyzes;
+    private IEnumerable<Analyze> ListOfRequests = new List<Analyze>();
+    private int requests;
+
+    private Data.Task selectedItem1 = null;
+    private HashSet<Data.Task> selectedItems = new HashSet<Data.Task>();
+
+    private IEnumerable<Data.Task> Elements = new List<Data.Task>();
+
+    protected override void OnInitialized()
+    {
+        ListOfAnalyzes = DBConnection.ImportOnlyAnalyzes();
+        analyzes = ListOfAnalyzes.Count();
+        ListOfAnalyzes = DBConnection.ImportOnlyAnalyzesOfWorker(currentUser.CurrentUserData);
+        analyzes = ListOfAnalyzes.Count();
+        ListOfRequests = DBConnection.ImportOnlyApplications();
+        requests = ListOfRequests.Count();
+        Elements = DBConnection.ImportTasksOfWorker(currentUser.CurrentUserData);
+    }
 }
 
 <style>

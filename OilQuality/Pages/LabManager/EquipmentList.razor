@@ -1,14 +1,14 @@
-﻿@page "/managerequiplist"
+﻿@page "/managerEquipList"
 @using OilQuality.Data;
 
 <MudAppBar Style="margin-top: 2%; position: absolute; width: 90%; left: 50%; transform: translate(-50%, 0); background-color: white; box-shadow: rgb(38, 57, 77) 0px 20px 30px -10px; align-items: center;">
-    <MudButton>
+    <MudButton Href="manager">
         Главная страница
     </MudButton>
-    <MudButton Href="/allanalyzelist">
+    <MudButton Href="/allAnalyzeList">
         Выполненные анализы
     </MudButton>
-    <MudButton Href="/managerequiplist">
+    <MudButton Href="/managerEquipList">
         Оборудование
     </MudButton>
 </MudAppBar>
@@ -21,15 +21,13 @@
                 <MudSpacer />
                 <MudTextField @bind-Value="searchString1" Placeholder="Search" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0"></MudTextField>
                 <MudSpacer />
-                <MudButton Variant="Variant.Outlined" Href="/equipment">Добавить</MudButton>
+                <MudButton Variant="Variant.Outlined" Href="/managerEquipment">Добавить</MudButton>
             </ToolBarContent>
             <HeaderContent>
                 <MudTh>Название</MudTh>
                 <MudTh>Начало эксплуатации</MudTh>
                 <MudTh>Конец эксплуатации</MudTh>
                 <MudTh>Просмотреть</MudTh>
-                @*                <MudTh>Position</MudTh>
-                <MudTh>Molar mass</MudTh>*@
             </HeaderContent>
             <RowTemplate>
                 <MudTd DataLabel="Название">@context.Title</MudTd>
@@ -37,9 +35,6 @@
                 <MudTd DataLabel="Конец эксплуатации">@context.DateEnd</MudTd>
                 <MudTd DataLabel="Просмотреть"><MudButton Variant="Variant.Outlined" Color="Color.Info">Просмотр</MudButton></MudTd>
             </RowTemplate>
-            @*            <PagerContent>
-            <MudTablePager />
-            </PagerContent>*@
         </MudTable>
     </div>
     <div style="flex: 49%;">

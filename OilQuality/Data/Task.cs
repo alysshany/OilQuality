@@ -13,8 +13,6 @@ namespace OilQuality.Data
 
         [BsonIgnoreIfDefault]
         public User Worker { get; set; }
-
-        [BsonIgnoreIfDefault]
         public bool isDone = false;
     }
 }

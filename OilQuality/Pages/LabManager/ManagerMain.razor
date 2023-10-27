@@ -2,29 +2,22 @@
 @using OilQuality.Data;
 
 <MudAppBar Style="margin-top: 2%; position: absolute; width: 90%; left: 50%; transform: translate(-50%, 0); background-color: white; box-shadow: rgb(38, 57, 77) 0px 20px 30px -10px; align-items: center;">
-    <MudButton>
+    <MudButton Href="manager">
         Главная страница
     </MudButton>
-    <MudButton Href="/allanalyzelist">
+    <MudButton Href="/allAnalyzeList">
         Выполненные анализы
     </MudButton>
-    <MudButton Href="/managerequiplist">
+    <MudButton Href="/managerEquipList">
         Оборудование
     </MudButton>
 </MudAppBar>
-
-@*<MudPaper Class="pa-16 ma-2" Elevation="3"></MudPaper>
-*@
 
 <div class="mainblock">
     <div style="width: 49%; height: 49%; box-shadow: rgb(38, 57, 77) 0px 5px 10px -0px;">
         <img src='/css//Mesh-20.png' style="width: 100%; height:100%; object-fit: cover; overflow: hidden">
     </div>
     <div style="background-color: white; width: 49%; height: 49%; box-shadow: rgb(38, 57, 77) 0px 5px 10px -0px; align-items: center">
-@*        <div class="d-flex mx-auto">
-            <MudButton Variant="Variant.Outlined" Color="Color.Info" Style="width: 40%; margin: 5px" Class="d-flex mx-auto">Выдать задание</MudButton>
-            <MudButton Variant="Variant.Outlined" Color="Color.Info" Style="width: 40%; margin: 5px" Class="d-flex mx-auto">Выдать задание</MudButton>
-        </div>*@
         <MudPaper style=" margin: 5px; width: 20%; box-shadow: rgb(38, 57, 77) 0px 5px 10px -0px; padding: 8px; ">
             <MudText style="text-align:center;">
                 Анализы
@@ -45,17 +38,8 @@
                 <label style="color: rgba(245, 166, 35, 1)">@users</label>
             </MudText>
         </MudPaper>
-@*        <MudText> 
-            Количество выполненных анализов:  @analyzes
-        </MudText>
-        <MudText>
-            Количество открытых заявок: @requests
-        </MudText>
-        <MudText>
-            Количество сотрудников: @users
-        </MudText>*@
         <br />
-        <MudButton Variant="Variant.Outlined" Color="Color.Info" Style="width: 40%; margin: 5px" Class="d-flex mx-auto">Выдать задание</MudButton>
+        <MudButton Variant="Variant.Outlined" Color="Color.Info" Style="width: 40%; margin: 5px" Class="d-flex mx-auto" Href="/taskAdding">Выдать задание</MudButton>
     </div>
     <div style="background-color: white; width: 49%; height: 49%; box-shadow: rgb(38, 57, 77) 0px 5px 10px -0px;">
         hhfdkdfdj
@@ -64,16 +48,6 @@
         <img src='/css//Mesh-20.png' style="width: 100%; height:100%; object-fit: cover; overflow: hidden">
     </div>
 </div>
-
-@*<div class="boxFive">
-    <label>
-        Число выполненных задач:
-    </label>
-    <br />
-    <label>
-        Число открытых заявок:
-    </label>
-</div>*@
 
 @code {
     private IEnumerable<Analyze> ListOfAnalyzes = new List<Analyze>();

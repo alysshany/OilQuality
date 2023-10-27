@@ -1,16 +1,16 @@
-﻿@page "/task"
+﻿@page "/taskAdding"
 @using OilQuality.Data;
 @inject ISnackbar Snackbar
 @inject NavigationManager navigation;
 
 <MudAppBar Style="margin-top: 2%; position: absolute; width: 90%; left: 50%; transform: translate(-50%, 0); background-color: white; box-shadow: rgb(38, 57, 77) 0px 20px 30px -10px; align-items: center;">
-    <MudButton Href="/manager">
+    <MudButton Href="manager">
         Главная страница
     </MudButton>
-    <MudButton Href="/allanalyzelist">
+    <MudButton Href="/allAnalyzeList">
         Выполненные анализы
     </MudButton>
-    <MudButton Href="/managerequiplist">
+    <MudButton Href="/managerEquipList">
         Оборудование
     </MudButton>
 </MudAppBar>
@@ -26,7 +26,7 @@
         <MudText Style="font-size: 16px">
             Описание:
         </MudText>
-        <MudTextField T="String" Variant="Variant.Text" Style="font-size: 16px; margin: 0" @bind-Value="@title" />
+        <MudTextField T="String" Variant="Variant.Text" Style="font-size: 16px; margin: 0" @bind-Value="@info" />
         <MudText Style="font-size: 16px; margin: 0">
             Сотрудник, выполняющий задание:
         </MudText>
@@ -44,7 +44,7 @@
 </div>
 
 @code {
-    string? title;
+    string? info;
     string? workerLogin;
     List<User> listOfUsers;
 
@@ -57,53 +57,26 @@
 
     public void NewTask()
     {
-        //if (workerLogin != null)
-        //{
-        //    if (surname != null && name != null && password != null)
-        //    {
-        //        DBConnection.ReplaceUser(user);
+        if (info != null && workerLogin != null)
+        {
+            var worker = DBConnection.FindUserByLogin(workerLogin);
 
-        //        Snackbar.Add("Изменения сохранены", Severity.Success);
+            Data.Task newTask = new Data.Task()
+            {
+                TaskInfo = info,
+                Worker = worker
+            };
 
-        //        navigation.NavigateTo("/adminViewLabWorker");
-        //    }
-        //    else
-        //    {
-        //        Snackbar.Add("Не все поля заполнены корректно.", Severity.Error);
-        //    }
-        //}
-        //else
-        //{
-        //    if (surname != null && name != null && login != null &&
-        //    password != null && role != null && role != "-")
-        //    {
-        //        if (DBConnection.FindUserByLogin(login) == null)
-        //        {
-        //            User userData = new User()
-        //                {
-        //                    Surname = surname,
-        //                    Name = name,
-        //                    Patronymic = patronymic,
-        //                    Login = login,
-        //                    Password = password,
-        //                    RoleName = role
-        //                };
-        //            DBConnection.AddToDataBase(userData);
+            DBConnection.AddTaskToDataBase(newTask);
 
-        //            Snackbar.Add("Успешно", Severity.Success);
-        //            navigation.NavigateTo("/admin");
+            Snackbar.Add("Задание добавлено", Severity.Success);
 
-        //        }
-        //        else
-        //        {
-        //            Snackbar.Add("Пользователь с такими данными уже существует.", Severity.Error);
-        //        }
-        //    }
-        //    else
-        //    {
-        //        Snackbar.Add("Не все необходимые поля заполнены.", Severity.Error);
-        //    }
-        //}
+            navigation.NavigateTo("/manager");
+        }
+        else
+        {
+            Snackbar.Add("Не все поля заполнены корректно.", Severity.Error);
+        }
     }
 }
 
