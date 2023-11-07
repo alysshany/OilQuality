@@ -1,19 +1,22 @@
 ﻿@page "/myAnalyzeList"
 @using OilQuality.Data;
 
-<MudAppBar Style="margin-top: 2%; position: absolute; width: 90%; left: 50%; transform: translate(-50%, 0); background-color: white; box-shadow: rgb(38, 57, 77) 0px 20px 30px -10px; align-items: center;">
-    <MudButton Href="/worker">
-        Главная страница
-    </MudButton>
-    <MudButton Href="/requestList">
-        Заявки
-    </MudButton>
-    <MudButton Href="/myAnalyzeList">
-        Выполненные анализы
-    </MudButton>
-    <MudButton Href="/workerEquipList">
-        Оборудование
-    </MudButton>
+<MudAppBar Style="margin-top: 2%; position: absolute; width: 90%; left: 50%; transform: translate(-50%, 0); background-color: white; box-shadow: rgb(38, 57, 77) 0px 20px 30px -10px;">
+    <div Class="d-flex mx-auto">
+        <MudButton Href="/worker">
+            Главная страница
+        </MudButton>
+        <MudButton Href="/requestList">
+            Заявки
+        </MudButton>
+        <MudButton Href="/myAnalyzeList">
+            Выполненные анализы
+        </MudButton>
+        <MudButton Href="/workerEquipList">
+            Оборудование
+        </MudButton>
+    </div>
+    <MudIconButton Icon="@Icons.Material.Outlined.ExitToApp" aria-label="exit" Href="/"></MudIconButton>
 </MudAppBar>
 
 
@@ -21,11 +24,10 @@
     <div style="flex: 50%; ">
         <MudTable Items="@workers" Filter="new Func<Analyze,bool>(FilterFunc1)" @bind-SelectedItem="selectedItem1">
             <ToolBarContent>
-                <MudText Typo="Typo.h6">Сотрудники</MudText>
+                <MudText Typo="Typo.h6">Анализы</MudText>
                 <MudSpacer />
                 <MudTextField @bind-Value="searchString1" Placeholder="Поиск" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0"></MudTextField>
                 <MudSpacer />
-                <MudButton Variant="Variant.Outlined">Добавить</MudButton>
             </ToolBarContent>
             <HeaderContent>
                 <MudTh>Номер</MudTh>

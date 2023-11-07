@@ -2,13 +2,16 @@
 @using Data;
 @inject NavigationManager navigation;
 
-<MudAppBar Style="margin-top: 2%; position: absolute; width: 90%; left: 50%; transform: translate(-50%, 0); background-color: white; box-shadow: rgb(38, 57, 77) 0px 20px 30px -10px; align-items: center;">
-    <MudButton Href="/admin">
-        Главная страница
-    </MudButton>
-    <MudButton Href="/workerslist">
-        Сотрудники
-    </MudButton>
+<MudAppBar Style="margin-top: 2%; position: absolute; width: 90%; left: 50%; transform: translate(-50%, 0); background-color: white; box-shadow: rgb(38, 57, 77) 0px 20px 30px -10px; ">
+    <div Class="d-flex mx-auto">
+        <MudButton Href="/admin">
+            Главная страница
+        </MudButton>
+        <MudButton Href="/workerslist">
+            Сотрудники
+        </MudButton>
+    </div>
+    <MudIconButton Icon="@Icons.Material.Outlined.ExitToApp" aria-label="exit" Href="/"></MudIconButton>
 </MudAppBar>
 
 <div class="mainblock">

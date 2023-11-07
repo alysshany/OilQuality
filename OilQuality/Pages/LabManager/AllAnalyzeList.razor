@@ -1,16 +1,22 @@
 ﻿@page "/allAnalyzeList"
 @using Data;
 
-<MudAppBar Style="margin-top: 2%; position: absolute; width: 90%; left: 50%; transform: translate(-50%, 0); background-color: white; box-shadow: rgb(38, 57, 77) 0px 20px 30px -10px; align-items: center;">
-    <MudButton Href="manager">
-        Главная страница
-    </MudButton>
-    <MudButton Href="/allAnalyzeList">
-        Выполненные анализы
-    </MudButton>
-    <MudButton Href="/managerEquipList">
-        Оборудование
-    </MudButton>
+<MudAppBar Style="margin-top: 2%; position: absolute; width: 90%; left: 50%; transform: translate(-50%, 0); background-color: white; box-shadow: rgb(38, 57, 77) 0px 20px 30px -10px;">
+    <div Class="d-flex mx-auto">
+        <MudButton Href="/manager">
+            Главная страница
+        </MudButton>
+        <MudButton Href="/requestListManager">
+            Заявки
+        </MudButton>
+        <MudButton Href="/allAnalyzeList">
+            Выполненные анализы
+        </MudButton>
+        <MudButton Href="/managerEquipList">
+            Оборудование
+        </MudButton>
+    </div>
+    <MudIconButton Icon="@Icons.Material.Outlined.ExitToApp" aria-label="exit" Href="/"></MudIconButton>
 </MudAppBar>
 
 <div class="mainblock">
@@ -21,7 +27,6 @@
                 <MudSpacer />
                 <MudTextField @bind-Value="searchString1" Placeholder="Search" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0"></MudTextField>
                 <MudSpacer />
-                <MudButton Variant="Variant.Outlined">Добавить</MudButton>
             </ToolBarContent>
             <HeaderContent>
                 <MudTh>Номер</MudTh>

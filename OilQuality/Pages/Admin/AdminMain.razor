@@ -1,23 +1,31 @@
 ﻿@page "/admin"
+@using OilQuality.Data;
 
-<MudAppBar Style="margin-top: 2%; position: absolute; width: 90%; left: 50%; transform: translate(-50%, 0); background-color: white; box-shadow: rgb(38, 57, 77) 0px 20px 30px -10px; align-items: center;">
-    <MudButton Href="/workerslist">
-        Главная страница
-    </MudButton>
-    <MudButton Href="/workerslist">
-        Сотрудники
-    </MudButton>
+<MudAppBar Style="margin-top: 2%; position: absolute; width: 90%; left: 50%; transform: translate(-50%, 0); background-color: white; box-shadow: rgb(38, 57, 77) 0px 20px 30px -10px; ">
+    <div Class="d-flex mx-auto">
+        <MudButton Href="/admin">
+            Главная страница
+        </MudButton>
+        <MudButton Href="/workerslist">
+            Сотрудники
+        </MudButton>
+    </div>
+    <MudIconButton Icon="@Icons.Material.Outlined.ExitToApp" aria-label="exit" Href="/"></MudIconButton>
 </MudAppBar>
 
 <div class="mainblock">
     <div style="width: 49%; height: 49%; box-shadow: rgb(38, 57, 77) 0px 5px 10px -0px;">
         <img src='/css//Mesh-20.png' style="width: 100%; height:100%; object-fit: cover; overflow: hidden">
     </div>
-    <div style="background-color: white; width: 49%; height: 49%; box-shadow: rgb(38, 57, 77) 0px 5px 10px -0px;">
-        dbvdbvdhbvd
+    <div style="background-color: white; width: 49%; height: 49%; box-shadow: rgb(38, 57, 77) 0px 5px 10px -0px; align-items: center;  justify-content: center;">
+        <MudChart ChartType="ChartType.Donut" LegendPosition="Position.Right" Width="260px" Height="260px"
+                  InputData="@data" InputLabels="@labels">
+        </MudChart>
     </div>
     <div style="background-color: white; width: 49%; height: 49%; box-shadow: rgb(38, 57, 77) 0px 5px 10px -0px;">
-        hhfdkdfdj
+        <MudChart ChartType="ChartType.Donut" LegendPosition="Position.Right" Width="260px" Height="260px"
+                  InputData="@dataTwo" InputLabels="@labelsTwo">
+        </MudChart>
     </div>
     <div style="width: 49%; height: 49%; box-shadow: rgb(38, 57, 77) 0px 5px 10px -0px;">
         <img src='/css//Mesh-20.png' style="width: 100%; height:100%; object-fit: cover; overflow: hidden">
@@ -26,6 +34,72 @@
 
 @code {
 
+    private IEnumerable<Analyze> ListOfAnalyzes = new List<Analyze>();
+    private int analyzes;
+    private IEnumerable<Analyze> ListOfRequests = new List<Analyze>();
+    private int requests;
+    private IEnumerable<User> ListOfUsers = new List<User>();
+    private int users;
+
+    DateTime? date = null;
+    string dateFormat = "dd.MM.yyyy";
+
+    public List<int> dataList = new List<int>();
+    public List<string> labelsList = new List<string>();
+    public string[] labels = new string[] { };
+    public double[] data = new double[] { };
+
+    public List<int> dataListTwo = new List<int>();
+    public List<string> labelsListTwo = new List<string>();
+    public string[] labelsTwo = new string[] { };
+    public double[] dataTwo = new double[] { };
+
+    protected override void OnInitialized()
+    {
+        ListOfAnalyzes = DBConnection.ImportOnlyAnalyzes();
+        analyzes = ListOfAnalyzes.Count();
+        ListOfRequests = DBConnection.ImportOnlyApplications();
+        requests = ListOfRequests.Count();
+        ListOfUsers = DBConnection.ImportAllLabWorkers();
+        users = ListOfUsers.Count();
+
+        UpdateChart();
+    }
+
+    private void UpdateChart()
+    {
+        dataList.Clear();
+        labelsList.Clear();
+
+        labelsList.Add("Администратор");
+
+        dataList.Add(DBConnection.ImportOnlyAdmins().Count);
+
+        labelsList.Add("Заведующий");
+
+        dataList.Add(DBConnection.ImportOnlyManagers().Count);
+
+        labelsList.Add("Лаборант");
+
+        dataList.Add(DBConnection.ImportOnlyWorkers().Count);
+
+        data = dataList.ToArray().Select(Convert.ToDouble).ToArray();
+        labels = labelsList.ToArray();
+
+        dataListTwo.Clear();
+        labelsListTwo.Clear();
+
+        labelsListTwo.Add("Заявки");
+
+        dataListTwo.Add(requests);
+
+        labelsListTwo.Add("Анализы");
+
+        dataListTwo.Add(analyzes);
+
+        dataTwo = dataListTwo.ToArray().Select(Convert.ToDouble).ToArray();
+        labelsTwo = labelsListTwo.ToArray();
+    }
 }
 
 

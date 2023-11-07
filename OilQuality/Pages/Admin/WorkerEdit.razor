@@ -4,13 +4,16 @@
 @inject ISnackbar Snackbar
 @inject NavigationManager navigation;
 
-<MudAppBar Style="margin-top: 2%; position: absolute; width: 90%; left: 50%; transform: translate(-50%, 0); background-color: white; box-shadow: rgb(38, 57, 77) 0px 20px 30px -10px; align-items: center;">
-    <MudButton Href="/admin">
-        Главная страница
-    </MudButton>
-    <MudButton Href="/workerslist">
-        Сотрудники
-    </MudButton>
+<MudAppBar Style="margin-top: 2%; position: absolute; width: 90%; left: 50%; transform: translate(-50%, 0); background-color: white; box-shadow: rgb(38, 57, 77) 0px 20px 30px -10px; ">
+    <div Class="d-flex mx-auto">
+        <MudButton Href="/admin">
+            Главная страница
+        </MudButton>
+        <MudButton Href="/workerslist">
+            Сотрудники
+        </MudButton>
+    </div>
+    <MudIconButton Icon="@Icons.Material.Outlined.ExitToApp" aria-label="exit" Href="/"></MudIconButton>
 </MudAppBar>
 
 <div class="mainblock">
@@ -18,29 +21,26 @@
         <img src='/css//Mesh-20.png' style="width: 100%; height:100%; object-fit: cover; overflow: hidden; box-shadow: rgb(38, 57, 77) 0px 20px 30px -10px;">
     </div>
     <div style="width: 50%;  padding: 25px; ">
-        <MudText Style="font-size: 18px; text-align: center; margin: 10px">
-            Новый сотрудник
-        </MudText>
         <MudText Style="font-size: 16px">
             Фамилия:
         </MudText>
-        <MudTextField T="String" Variant="Variant.Text" Style="font-size: 16px; margin: 0" @bind-Value="@surname" />
+        <MudTextField T="String" Variant="Variant.Text" Style="font-size: 16px; margin: 0; margin-bottom: 10px" @bind-Value="@surname"/>
         <MudText Style="font-size: 16px">
             Имя:
         </MudText>
-        <MudTextField T="String" Variant="Variant.Text" Style="font-size: 16px; margin: 0" @bind-Value="@name" />
+        <MudTextField T="String" Variant="Variant.Text" Style="font-size: 16px; margin: 0; margin-bottom: 10px" @bind-Value="@name" />
         <MudText Style="font-size: 16px">
             Отчество:
         </MudText>
-        <MudTextField T="String" Variant="Variant.Text" Style=" font-size: 16px; margin: 0 " @bind-Value="@patronymic" />
+        <MudTextField T="String" Variant="Variant.Text" Style=" font-size: 16px; margin: 0; margin-bottom: 10px" @bind-Value="@patronymic" />
         <MudText Style="font-size: 16px">
             Логин:
         </MudText>
-        <MudTextField T="String" Variant="Variant.Text" Style="font-size: 16px; margin: 0" @bind-Value="@login" />
+        <MudTextField T="String" Variant="Variant.Text" Style="font-size: 16px; margin: 0; margin-bottom: 10px" @bind-Value="@login" />
         <MudText Style="font-size: 16px">
             Пароль:
         </MudText>
-        <MudTextField T="String" Variant="Variant.Text" Style="font-size: 16px; margin: 0" @bind-Value="@password" />
+        <MudTextField T="String" Variant="Variant.Text" Style="font-size: 16px; margin: 0; margin-bottom: 10px" @bind-Value="@password" />
         <MudText Style="font-size: 16px; margin: 0">
             Роль:
         </MudText>
@@ -49,6 +49,7 @@
             <MudSelectItem Value="@("Лаборант")" />
             <MudSelectItem Value="@("Заведующий")" />
         </MudSelect>
+        <br />
         <MudButton Variant="Variant.Outlined" Color="Color.Info" Class="d-flex mx-auto" Style="margin: 15px" @onclick="RegistrationLabWorker">
             Сохранить
         </MudButton>
@@ -182,6 +183,7 @@
         flex-direction: row;
         justify-content: center;
         align-self: center;
+        background-color: white;
         /*        background-image: url('/css//Mesh-51.png');*/
     }
 </style>

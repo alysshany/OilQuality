@@ -81,6 +81,33 @@ namespace OilQuality.Data
             return list;
         }
 
+        public static List<User> ImportOnlyWorkers()
+        {
+            var client = new MongoClient("mongodb://localhost:27017");
+            var database = client.GetDatabase("OilQuality");
+            var collection = database.GetCollection<User>("CollectionOfUsers");
+            var list = collection.Find(x => x.RoleName == "Лаборант").ToList();
+            return list;
+        }
+
+        public static List<User> ImportOnlyManagers()
+        {
+            var client = new MongoClient("mongodb://localhost:27017");
+            var database = client.GetDatabase("OilQuality");
+            var collection = database.GetCollection<User>("CollectionOfUsers");
+            var list = collection.Find(x => x.RoleName == "Заведующий").ToList();
+            return list;
+        }
+
+        public static List<User> ImportOnlyAdmins()
+        {
+            var client = new MongoClient("mongodb://localhost:27017");
+            var database = client.GetDatabase("OilQuality");
+            var collection = database.GetCollection<User>("CollectionOfUsers");
+            var list = collection.Find(x => x.RoleName == "Администратор").ToList();
+            return list;
+        }
+
         public static List<User> ImportAllLabWorkers()
         {
             var client = new MongoClient("mongodb://localhost:27017");

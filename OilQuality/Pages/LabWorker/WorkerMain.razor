@@ -3,19 +3,22 @@
 @inject CurrentUser currentUser;
 
 
-<MudAppBar Style="margin-top: 2%; position: absolute; width: 90%; left: 50%; transform: translate(-50%, 0); background-color: white; box-shadow: rgb(38, 57, 77) 0px 20px 30px -10px; align-items: center;">
-    <MudButton Href="/worker">
-        Главная страница
-    </MudButton>
-    <MudButton Href="/requestList">
-        Заявки
-    </MudButton>
-    <MudButton Href="/myAnalyzeList">
-        Выполненные анализы
-    </MudButton>
-    <MudButton Href="/workerEquipList">
-        Оборудование
-    </MudButton>
+<MudAppBar Style="margin-top: 2%; position: absolute; width: 90%; left: 50%; transform: translate(-50%, 0); background-color: white; box-shadow: rgb(38, 57, 77) 0px 20px 30px -10px;">
+    <div Class="d-flex mx-auto">
+        <MudButton Href="/worker">
+            Главная страница
+        </MudButton>
+        <MudButton Href="/requestList">
+            Заявки
+        </MudButton>
+        <MudButton Href="/myAnalyzeList">
+            Выполненные анализы
+        </MudButton>
+        <MudButton Href="/workerEquipList">
+            Оборудование
+        </MudButton>
+    </div>
+    <MudIconButton Icon="@Icons.Material.Outlined.ExitToApp" aria-label="exit" Href="/"></MudIconButton>
 </MudAppBar>
 
 <div class="mainblock">
@@ -23,17 +26,9 @@
         <img src='/css//Mesh-20.png' style="width: 100%; height:100%; object-fit: cover; overflow: hidden">
     </div>
     <div style="background-color: white; width: 49%; height: 49%; box-shadow: rgb(38, 57, 77) 0px 5px 10px -0px;">
-        <label>
-            Число выполненных заявок: @analyzes
-        </label>
-        <br />
-        <label>
-            Число выполненных мною заявок: @myAnalyzes
-        </label>
-        <br />
-        <label>
-            Число открытых заявок: @requests
-        </label>
+        <MudChart ChartType="ChartType.Donut" LegendPosition="Position.Right" Width="260px" Height="260px"
+                  InputData="@data" InputLabels="@labels">
+        </MudChart>
     </div>
     <div style="background-color: white; width: 49%; height: 49%; box-shadow: rgb(38, 57, 77) 0px 5px 10px -0px; overflow: scroll;">
         <MudTable Items="@Elements" @bind-SelectedItem="selectedItem1" Height="auto">
@@ -85,6 +80,10 @@
     private int requests;
 
     private Data.Task selectedItem1 = null;
+    public List<int> dataList = new List<int>();
+    public List<string> labelsList = new List<string>();
+    public string[] labels = new string[] { };
+    public double[] data = new double[] { };
     private HashSet<Data.Task> selectedItems = new HashSet<Data.Task>();
 
     private IEnumerable<Data.Task> Elements = new List<Data.Task>();
@@ -98,6 +97,46 @@
         ListOfRequests = DBConnection.ImportOnlyApplications();
         requests = ListOfRequests.Count();
         Elements = DBConnection.ImportTasksOfWorker(currentUser.CurrentUserData);
+
+        UpdateChart();
+    }
+
+    private void UpdateChart()
+    {
+        dataList.Clear();
+        labelsList.Clear();
+
+        labelsList.Add("Заявки");
+
+        dataList.Add(requests);
+
+        labelsList.Add("Анализы");
+
+        dataList.Add(analyzes);
+
+        //foreach (var cl in ListOfUsers)
+        //{
+        //    List<User> lessons = ;
+
+        //    if (lessons != null && date != null)
+        //    {
+        //        foreach (var todayLesson in lessons)
+        //        {
+        //            var lessonDate = Convert.ToDateTime(todayLesson.TimeStart).Day;
+
+        //            if (Convert.ToDateTime(date).Day == lessonDate)
+        //            {
+        //                int attend = EducationClubContext.Attendences.Where(x => x.LessonId == todayLesson.Id).Count();
+
+        //                labelsList.Add(todayLesson.Title);
+        //                dataList.Add(attend);
+        //            }
+        //        }
+        //    }
+        //}
+
+        data = dataList.ToArray().Select(Convert.ToDouble).ToArray();
+        labels = labelsList.ToArray();
     }
 }
 

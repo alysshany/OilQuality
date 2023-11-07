@@ -4,16 +4,22 @@
 @inject ISnackbar Snackbar
 @inject NavigationManager navigation;
 
-<MudAppBar Style="margin-top: 2%; position: absolute; width: 90%; left: 50%; transform: translate(-50%, 0); background-color: white; box-shadow: rgb(38, 57, 77) 0px 20px 30px -10px; align-items: center;">
-    <MudButton Href="manager">
-        Главная страница
-    </MudButton>
-    <MudButton Href="/allAnalyzeList">
-        Выполненные анализы
-    </MudButton>
-    <MudButton Href="/managerEquipList">
-        Оборудование
-    </MudButton>
+<MudAppBar Style="margin-top: 2%; position: absolute; width: 90%; left: 50%; transform: translate(-50%, 0); background-color: white; box-shadow: rgb(38, 57, 77) 0px 20px 30px -10px;">
+    <div Class="d-flex mx-auto">
+        <MudButton Href="/manager">
+            Главная страница
+        </MudButton>
+        <MudButton Href="/requestListManager">
+            Заявки
+        </MudButton>
+        <MudButton Href="/allAnalyzeList">
+            Выполненные анализы
+        </MudButton>
+        <MudButton Href="/managerEquipList">
+            Оборудование
+        </MudButton>
+    </div>
+    <MudIconButton Icon="@Icons.Material.Outlined.ExitToApp" aria-label="exit" Href="/"></MudIconButton>
 </MudAppBar>
 
 <div class="mainblock">
@@ -27,15 +33,15 @@
         <MudText Style="font-size: 16px">
             Наименование:
         </MudText>
-        <MudTextField T="String" Variant="Variant.Text" Style="font-size: 16px; margin: 0" @bind-Value="@title" />
+        <MudTextField T="String" Variant="Variant.Text" Style="font-size: 16px; margin: 0; margin-bottom: 10px" @bind-Value="@title" />
         <MudText Style="font-size: 16px">
             Дата начала эксплуатации:
         </MudText>
-        <MudTextField T="DateTime?" Variant="Variant.Text" Style="font-size: 16px; margin: 0" @bind-Value="@dateBegin" />
+        <MudTextField T="DateTime?" Variant="Variant.Text" Style="font-size: 16px; margin: 0; margin-bottom: 10px" @bind-Value="@dateBegin" />
         <MudText Style="font-size: 16px">
             Дата конца эксплуатации:
         </MudText>
-        <MudTextField T="DateTime?" Variant="Variant.Text" Style=" font-size: 16px; margin: 0 " @bind-Value="@dateEnd" />
+        <MudTextField T="DateTime?" Variant="Variant.Text" Style=" font-size: 16px; margin: 0; margin-bottom: 10px " @bind-Value="@dateEnd" />
         <MudText Style="font-size: 16px; margin: 0">
             Ответсвенный:
         </MudText>
@@ -45,6 +51,7 @@
                 <MudSelectItem Value="@worker.Surname" />
             }
         </MudSelect>
+        <br/>
         <MudButton Variant="Variant.Outlined" Color="Color.Info" Class="d-flex mx-auto" Style="margin: 15px" @onclick="RegistrationLabWorker">
             Сохранить
         </MudButton>
@@ -203,6 +210,7 @@
         flex-direction: row;
         justify-content: center;
         align-self: center;
+        background-color: white;
         /*        background-image: url('/css//Mesh-51.png');*/
     }
 </style>

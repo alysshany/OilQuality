@@ -1,18 +1,18 @@
-﻿@page "/workerEquipList"
-@using OilQuality.Data;
+﻿@page "/requestListManager"
+@using Data;
 
 <MudAppBar Style="margin-top: 2%; position: absolute; width: 90%; left: 50%; transform: translate(-50%, 0); background-color: white; box-shadow: rgb(38, 57, 77) 0px 20px 30px -10px;">
     <div Class="d-flex mx-auto">
-        <MudButton Href="/worker">
+        <MudButton Href="/manager">
             Главная страница
         </MudButton>
-        <MudButton Href="/requestList">
+        <MudButton Href="/requestListManager">
             Заявки
         </MudButton>
-        <MudButton Href="/myAnalyzeList">
+        <MudButton Href="/allAnalyzeList">
             Выполненные анализы
         </MudButton>
-        <MudButton Href="/workerEquipList">
+        <MudButton Href="/managerEquipList">
             Оборудование
         </MudButton>
     </div>
@@ -21,31 +21,31 @@
 
 <div class="mainblock">
     <div style="flex: 50%; ">
-        <MudTable Items="@equipment" Filter="new Func<Equipment,bool>(FilterFunc1)" @bind-SelectedItem="selectedItem1">
+        <MudTable Items="@analyzes" Filter="new Func<Analyze,bool>(FilterFunc1)" @bind-SelectedItem="selectedItem1">
             <ToolBarContent>
-                <MudText Typo="Typo.h6">Оборудование</MudText>
+                <MudText Typo="Typo.h6">Заявки</MudText>
                 <MudSpacer />
                 <MudTextField @bind-Value="searchString1" Placeholder="Search" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0"></MudTextField>
                 <MudSpacer />
-                <MudButton Variant="Variant.Outlined" Href="/workerEquipment">Добавить</MudButton>
+                <MudButton Variant="Variant.Outlined" Href="/requestadd">Добавить</MudButton>
             </ToolBarContent>
             <HeaderContent>
-                <MudTh>Название</MudTh>
-                <MudTh>Начало эксплуатации</MudTh>
-                <MudTh>Конец эксплуатации</MudTh>
-                <MudTh>Просмотреть</MudTh>
+                <MudTh>Номер</MudTh>
+                <MudTh>Тип</MudTh>
+                <MudTh>Месторождение</MudTh>
                 @*                <MudTh>Position</MudTh>
                 <MudTh>Molar mass</MudTh>*@
             </HeaderContent>
             <RowTemplate>
-                <MudTd DataLabel="Название">@context.Title</MudTd>
-                <MudTd DataLabel="Начало эксплуатации">@context.DateBegin</MudTd>
-                <MudTd DataLabel="Конец эксплуатации">@context.DateEnd</MudTd>
-                <MudTd DataLabel="Просмотреть"><MudButton Variant="Variant.Outlined" Color="Color.Info">Просмотр</MudButton></MudTd>
+                <MudTd DataLabel="Фамилия">@context.Title</MudTd>
+                <MudTd DataLabel="Имя">@context.Type</MudTd>
+                <MudTd DataLabel="Отчество">@context.Deposit</MudTd>
+                @*                <MudTd DataLabel="Position">@context.Position</MudTd>
+                <MudTd DataLabel="Molar mass">@context.Molar</MudTd>*@
             </RowTemplate>
-            @*            <PagerContent>
-            <MudTablePager />
-            </PagerContent>*@
+            <PagerContent>
+                <MudTablePager />
+            </PagerContent>
         </MudTable>
     </div>
     <div style="flex: 49%;">
@@ -54,31 +54,32 @@
 </div>
 
 @code {
-    List<Equipment> equipment;
+    List<Analyze> analyzes;
     private string searchString1 = "";
-    private Equipment selectedItem1 = null;
-    private HashSet<Equipment> selectedItems = new HashSet<Equipment>();
+    private Analyze selectedItem1 = null;
+    private HashSet<Analyze> selectedItems = new HashSet<Analyze>();
 
     protected override void OnInitialized()
     {
-        equipment = DBConnection.ImportAllEquipments();
+        analyzes = DBConnection.ImportOnlyApplications();
     }
 
-    private bool FilterFunc1(Equipment element) => FilterFunc(element, searchString1);
+    private bool FilterFunc1(Analyze element) => FilterFunc(element, searchString1);
 
-    private bool FilterFunc(Equipment element, string searchString)
+    private bool FilterFunc(Analyze element, string searchString)
     {
         if (string.IsNullOrWhiteSpace(searchString))
             return true;
         if (element.Title.Contains(searchString, StringComparison.OrdinalIgnoreCase))
             return true;
-        //if (element.DateBegin.Contains(searchString, StringComparison.OrdinalIgnoreCase))
-        //    return true;
-        //if ($"{element.DateEnd}".Contains(searchString))
-        //    return true;
+        if (element.Type.Contains(searchString, StringComparison.OrdinalIgnoreCase))
+            return true;
+        if ($"{element.Deposit}".Contains(searchString))
+            return true;
         return false;
     }
 }
+
 
 <style>
     .mainblock {
