@@ -1,5 +1,5 @@
-﻿@page "/managerEquipment"
-@page "/managerEquipment/{equipmentId}"
+﻿@page "/managerEquipmentAdd"
+@page "/managerEquipment/{equipmentTitle}"
 @using OilQuality.Data;
 @inject ISnackbar Snackbar
 @inject NavigationManager navigation;
@@ -37,11 +37,11 @@
         <MudText Style="font-size: 16px">
             Дата начала эксплуатации:
         </MudText>
-        <MudTextField T="DateTime?" Variant="Variant.Text" Style="font-size: 16px; margin: 0; margin-bottom: 10px" @bind-Value="@dateBegin" />
+        <MudTextField Format="yyyy-MM-dd" InputType="InputType.Date" T="DateTime?" Variant="Variant.Text" Style="font-size: 16px; margin: 0; margin-bottom: 10px" @bind-Value="@dateBegin" />
         <MudText Style="font-size: 16px">
             Дата конца эксплуатации:
         </MudText>
-        <MudTextField T="DateTime?" Variant="Variant.Text" Style=" font-size: 16px; margin: 0; margin-bottom: 10px " @bind-Value="@dateEnd" />
+        <MudTextField Format="yyyy-MM-dd" InputType="InputType.Date" T="DateTime?" Variant="Variant.Text" Style=" font-size: 16px; margin: 0; margin-bottom: 10px " @bind-Value="@dateEnd" />
         <MudText Style="font-size: 16px; margin: 0">
             Ответсвенный:
         </MudText>
@@ -68,23 +68,22 @@
     Equipment equipment;
 
     [Parameter]
-    public string? equipmentId { get; set; }
+    public string? equipmentTitle { get; set; }
 
 
     protected override void OnInitialized()
     {
         listOfUsers = DBConnection.ImportAllLabWorkers();
 
-        if (equipmentId != null)
+        if (equipmentTitle != null)
         {
-            //equipment = DBConnection.;
+            equipment = DBConnection.FindEquipmentByTitle(equipmentTitle);
 
-            //surname = user.Surname;
-            //name = user.Name;
-            //patronymic = user.Patronymic;
-            //login = user.Login;
-            //password = user.Password;
-            //role = user.RoleName;
+            title = equipment.Title;
+            dateBegin = equipment.DateBegin;
+            dateEnd = equipment.DateEnd;
+            workerLogin = equipment.User.Surname;
+
         }
     }
 

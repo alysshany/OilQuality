@@ -7,16 +7,16 @@
 
 <MudAppBar Style="margin-top: 2%; position: absolute; width: 90%; left: 50%; transform: translate(-50%, 0); background-color: white; box-shadow: rgb(38, 57, 77) 0px 20px 30px -10px;">
     <div Class="d-flex mx-auto">
-        <MudButton Href="/manager">
+        <MudButton Href="/worker">
             Главная страница
         </MudButton>
-        <MudButton Href="/requestListManager">
+        <MudButton Href="/requestList">
             Заявки
         </MudButton>
-        <MudButton Href="/allAnalyzeList">
+        <MudButton Href="/myAnalyzeList">
             Выполненные анализы
         </MudButton>
-        <MudButton Href="/managerEquipList">
+        <MudButton Href="/workerEquipList">
             Оборудование
         </MudButton>
     </div>
@@ -28,28 +28,29 @@
         <img src='/css//Mesh-20.png' style="width: 100%; height:100%; object-fit: cover; overflow: hidden; box-shadow: rgb(38, 57, 77) 0px 20px 30px -10px;">
     </div>
     <div style="width: 50%; margin: 25px; padding: 25px; ">
-        <MudText Style="font-size: 18px; text-align: center; margin: 10px">
-            Заявка на анализ
-        </MudText>
         <MudText Style="font-size: 16px">
-            Номер: @analyze.Title
+            Номер:
         </MudText>
+        <MudTextField T="String" Variant="Variant.Text" Style="font-size: 16px; margin: 0; margin-bottom: 10px" @bind-Value="@title" Disabled=true />
         <MudText Style="font-size: 16px">
-            Объект исследования: @analyze.Type
+            Объект исследования:
         </MudText>
+        <MudTextField T="String" Variant="Variant.Text" Style="font-size: 16px; margin: 0; margin-bottom: 10px" @bind-Value="@type" Disabled=true />
         <MudText Style="font-size: 16px">
-            Месторождение: @analyze.Deposit
+            Месторождение:
         </MudText>
+        <MudTextField T="String" Variant="Variant.Text" Style="font-size: 16px; margin: 0; margin-bottom: 10px" @bind-Value="@depositActual" Disabled=true />
         <MudText Style="font-size: 16px">
-            Определяемый показатель: @analyze.DefinedIndicatorData
+            Определяемый показатель:
         </MudText>
-        <MudText Style="font-size: 16px;">
-            Метод: @analyze.MethodData
+        <MudTextField T="String" Variant="Variant.Text" Style="font-size: 16px; margin: 0; margin-bottom: 10px" @bind-Value="@indicator" Disabled=true />
+        <MudText Style="font-size: 16px; margin: 0">
+            Метод: @method
         </MudText>
         <MudText Style="font-size: 16px;">
             Результат: 
         </MudText>
-        <MudTextField T="String" Variant="Variant.Text" Style="font-size: 16px; margin: 0; margin-bottom: 10px" @bind-Value="@result" />
+        <MudTextField T="String" Variant="Variant.Text" Style="font-size: 16px; margin: 0; margin-bottom: 10px" @bind-Value="@result" Disabled=disabled />
 
         @*DISABLED НАДО СДЛЕАТЬ, ВО ВРЕМЯ ПРОСМОТРА*@
 
@@ -61,7 +62,13 @@
 </div>
 
 @code {
+    string? title;
+    string? type;
+    string? indicator;
+    string? method;
+    string? depositActual;
     string? result;
+    bool disabled;
 
     Analyze analyze;
 
@@ -71,6 +78,23 @@
     protected override void OnInitialized()
     {
         analyze = DBConnection.FindAnalyzeByTitle(analyzeId);
+
+        if (analyze.ResultData == null)
+        {
+            disabled = false;
+        }
+        else
+        {
+            disabled = true;
+
+            result = analyze.ResultData;
+        }
+
+        title = analyze.Title;
+        type = analyze.Type;
+        indicator = analyze.DefinedIndicatorData;
+        method = analyze.MethodData;
+        depositActual = analyze.Deposit;
     }
 
     

@@ -63,6 +63,15 @@ namespace OilQuality.Data
             return analyze;
         }
 
+        public static Equipment FindEquipmentByTitle(string title)
+        {
+            var client = new MongoClient("mongodb://localhost:27017");
+            var database = client.GetDatabase("OilQuality");
+            var collection = database.GetCollection<Equipment>("CollectionOfEquipments");
+            var equipment = collection.Find(x => x.Title == title).FirstOrDefault();
+            return equipment;
+        }
+
         public static User FindUserByLogin(string login)
         {
             var client = new MongoClient("mongodb://localhost:27017");

@@ -77,14 +77,12 @@
 
         if (equipmentId != null)
         {
-            //equipment = DBConnection.;
+            equipment = DBConnection.FindEquipmentByTitle(equipmentId);
 
-            //surname = user.Surname;
-            //name = user.Name;
-            //patronymic = user.Patronymic;
-            //login = user.Login;
-            //password = user.Password;
-            //role = user.RoleName;
+            title = equipment.Title;
+            dateBegin = equipment.DateBegin;
+            dateEnd = equipment.DateEnd;
+            workerLogin = equipment.User.Surname;
         }
     }
 

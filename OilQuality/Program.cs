@@ -12,6 +12,7 @@ builder.Services.AddServerSideBlazor();
 builder.Services.AddSingleton<CurrentUser>();
 builder.Services.AddSingleton<Deposit>();
 builder.Services.AddSingleton<DefinedIndicator>();
+builder.Services.AddSingleton<MethodData>();
 
 var app = builder.Build();
 

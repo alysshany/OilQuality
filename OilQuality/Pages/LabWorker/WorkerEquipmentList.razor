@@ -1,5 +1,6 @@
 ﻿@page "/workerEquipList"
 @using OilQuality.Data;
+@inject NavigationManager navigation;
 
 <MudAppBar Style="margin-top: 2%; position: absolute; width: 90%; left: 50%; transform: translate(-50%, 0); background-color: white; box-shadow: rgb(38, 57, 77) 0px 20px 30px -10px;">
     <div Class="d-flex mx-auto">
@@ -20,7 +21,7 @@
 </MudAppBar>
 
 <div class="mainblock">
-    <div style="flex: 50%; ">
+    <div style="flex: 50%; overflow: scroll;">
         <MudTable Items="@equipment" Filter="new Func<Equipment,bool>(FilterFunc1)" @bind-SelectedItem="selectedItem1">
             <ToolBarContent>
                 <MudText Typo="Typo.h6">Оборудование</MudText>
@@ -31,21 +32,14 @@
             </ToolBarContent>
             <HeaderContent>
                 <MudTh>Название</MudTh>
-                <MudTh>Начало эксплуатации</MudTh>
-                <MudTh>Конец эксплуатации</MudTh>
+                <MudTh>Ответственный</MudTh>
                 <MudTh>Просмотреть</MudTh>
-                @*                <MudTh>Position</MudTh>
-                <MudTh>Molar mass</MudTh>*@
             </HeaderContent>
             <RowTemplate>
                 <MudTd DataLabel="Название">@context.Title</MudTd>
-                <MudTd DataLabel="Начало эксплуатации">@context.DateBegin</MudTd>
-                <MudTd DataLabel="Конец эксплуатации">@context.DateEnd</MudTd>
-                <MudTd DataLabel="Просмотреть"><MudButton Variant="Variant.Outlined" Color="Color.Info">Просмотр</MudButton></MudTd>
+                <MudTd DataLabel="Ответственный">@context.User.Surname @context.User.Name</MudTd>
+                <MudTd DataLabel="Просмотреть"><MudButton Variant="Variant.Outlined" Color="Color.Info" OnClick="() => NavigationToEquipmentInfo(context.Title)">Просмотр</MudButton></MudTd>
             </RowTemplate>
-            @*            <PagerContent>
-            <MudTablePager />
-            </PagerContent>*@
         </MudTable>
     </div>
     <div style="flex: 49%;">
@@ -62,6 +56,11 @@
     protected override void OnInitialized()
     {
         equipment = DBConnection.ImportAllEquipments();
+    }
+
+    public void NavigationToEquipmentInfo(string equipment)
+    {
+        navigation.NavigateTo($"/workerEquipment/{equipment}");
     }
 
     private bool FilterFunc1(Equipment element) => FilterFunc(element, searchString1);

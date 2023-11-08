@@ -5,6 +5,7 @@
 @inject NavigationManager navigation;
 @inject Deposit depositData;
 @inject DefinedIndicator definedIndicatorData;
+@inject MethodData methodData;
 
 <MudAppBar Style="margin-top: 2%; position: absolute; width: 90%; left: 50%; transform: translate(-50%, 0); background-color: white; box-shadow: rgb(38, 57, 77) 0px 20px 30px -10px;">
     <div Class="d-flex mx-auto">
@@ -30,7 +31,7 @@
     </div>
     <div style="width: 50%; margin: 25px; padding: 25px; ">
         <MudText Style="font-size: 18px; text-align: center; margin: 10px">
-            Заявка на анализ
+            АНАЛИЗ
         </MudText>
         <MudText Style="font-size: 16px">
             Номер:
@@ -55,21 +56,16 @@
         <MudText Style="font-size: 16px">
             Определяемый показатель:
         </MudText>
-        <MudSelect T="String" @bind-Value="@indicator" @onchange="IndicatorChange" Style="font-size: 16px; margin: 0; margin-bottom: 10px">
+        <MudSelect Value="@indicator" T="String" ValueChanged="IndicatorChange" Style="font-size: 16px; margin: 0; margin-bottom: 10px">
             @foreach (var indic in indicators)
             {
                 <MudSelectItem Value="@indic" />
             }
         </MudSelect>
         <MudText Style="font-size: 16px; margin: 0">
-            Метод:
+            Метод: @method
         </MudText>
-@*        <MudSelect T="String" @bind-Value="@method" Style="font-size: 16px; margin: 0">
-            <MudSelectItem Value="@("Администратор")" />
-            <MudSelectItem Value="@("Лаборант")" />
-            <MudSelectItem Value="@("Заведующий")" />
-        </MudSelect>*@
-
+        <br />
         <MudButton Variant="Variant.Outlined" Color="Color.Info" Class="d-flex mx-auto" Style="margin: 15px" @onclick="RegistrationNewAnalyze">
             Сохранить
         </MudButton>
@@ -100,19 +96,20 @@
         };
     }
 
-    public void IndicatorChange(ChangeEventArgs e)
+    public void IndicatorChange(string selected)
     {
-        if (e.Value is not null)
+        indicator = selected;
+
+        if (indicator != null)
         {
-            indicator = e.Value.ToString();
             switch (type)
             {
-                //case "Вода":
-                //    method = methodData.methodsWater[indicator];
-                //    break;
-                //case "Нефть":
-                //    method = methodData.methodsOil[indicator];
-                //    break;
+                case "Вода":
+                    method = methodData.methodsWater[indicator];
+                    break;
+                case "Нефть":
+                    method = methodData.methodsOil[indicator];
+                    break;
 
             }
         }
@@ -123,6 +120,7 @@
         type = selected;
         depositActual = null;
         indicator = null;
+        method = null;
 
         switch (type)
         {
@@ -144,35 +142,34 @@
 
     public void RegistrationNewAnalyze()
     {
-        //if (surname != null && name != null && login != null &&
-        //    password != null && role != null && role != "-")
-        //{
-        //    if (DBConnection.FindUserByLogin(login) == null)
-        //    {
-        //        User userData = new User()
-        //            {
-        //                Surname = surname,
-        //                Name = name,
-        //                Patronymic = patronymic,
-        //                Login = login,
-        //                Password = password,
-        //                RoleName = role
-        //            };
-        //        DBConnection.AddToDataBase(userData);
+        if (title != null && type != null && indicator != null &&
+            method != null && depositActual != null)
+        {
+            if (DBConnection.FindAnalyzeByTitle(title) == null)
+            {
+                Analyze analyzeData = new Analyze()
+                {
+                    Title = title,
+                    Type = type,
+                    DefinedIndicatorData = indicator,
+                    Deposit = depositActual,
+                    MethodData = method
+                };
+                DBConnection.AddAnalyzeToDataBase(analyzeData);
 
-        //        Snackbar.Add("Успешно", Severity.Success);
-        //        navigation.NavigateTo("/admin");
+                Snackbar.Add("Успешно", Severity.Success);
+                navigation.NavigateTo("/manager");
 
-        //    }
-        //    else
-        //    {
-        //        Snackbar.Add("Пользователь с такими данными уже существует.", Severity.Error);
-        //    }
-        //}
-        //else
-        //{
-        //    Snackbar.Add("Не все необходимые поля заполнены.", Severity.Error);
-        //}
+            }
+            else
+            {
+                Snackbar.Add("Анализ с таким номером уже существует.", Severity.Error);
+            }
+        }
+        else
+        {
+            Snackbar.Add("Не все необходимые поля заполнены.", Severity.Error);
+        }
     }
 }
 

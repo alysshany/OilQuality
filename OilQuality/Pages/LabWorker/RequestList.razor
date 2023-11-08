@@ -1,4 +1,5 @@
 ﻿@page "/requestList"
+@inject NavigationManager navigation;
 @using Data;
 
 <MudAppBar Style="margin-top: 2%; position: absolute; width: 90%; left: 50%; transform: translate(-50%, 0); background-color: white; box-shadow: rgb(38, 57, 77) 0px 20px 30px -10px;">
@@ -20,7 +21,7 @@
 </MudAppBar>
 
 <div class="mainblock">
-    <div style="flex: 50%; ">
+    <div style="flex: 50%; overflow: scroll;">
         <MudTable Items="@analyzes" Filter="new Func<Analyze,bool>(FilterFunc1)" @bind-SelectedItem="selectedItem1">
             <ToolBarContent>
                 <MudText Typo="Typo.h6">Заявки</MudText>
@@ -33,20 +34,13 @@
                 <MudTh>Тип</MudTh>
                 <MudTh>Месторождение</MudTh>
                 <MudTh>Провести</MudTh>
-                @*                <MudTh>Position</MudTh>
-                <MudTh>Molar mass</MudTh>*@
             </HeaderContent>
             <RowTemplate>
-                <MudTd DataLabel="Фамилия">@context.Title</MudTd>
-                <MudTd DataLabel="Имя">@context.Type</MudTd>
-                <MudTd DataLabel="Отчество">@context.Deposit</MudTd>
-                <MudTd DataLabel="Отчество"><MudButton>Провести</MudButton></MudTd>
-                @*                <MudTd DataLabel="Position">@context.Position</MudTd>
-                <MudTd DataLabel="Molar mass">@context.Molar</MudTd>*@
+                <MudTd DataLabel="Номер">@context.Title</MudTd>
+                <MudTd DataLabel="Тип">@context.Type</MudTd>
+                <MudTd DataLabel="Месорождение">@context.Deposit</MudTd>
+                <MudTd DataLabel="Провести"><MudButton OnClick="() => NavigationToAnalyze(context.Title)">Провести</MudButton></MudTd>
             </RowTemplate>
-            <PagerContent>
-                <MudTablePager />
-            </PagerContent>
         </MudTable>
     </div>
     <div style="flex: 49%;">
@@ -78,6 +72,11 @@
         if ($"{element.Deposit}".Contains(searchString))
             return true;
         return false;
+    }
+
+    public void NavigationToAnalyze(string id)
+    {
+        navigation.NavigateTo($"/analyzeOrReq/{id}");
     }
 }
 

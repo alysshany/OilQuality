@@ -1,5 +1,6 @@
 ﻿@page "/managerEquipList"
 @using OilQuality.Data;
+@inject NavigationManager navigation;
 
 <MudAppBar Style="margin-top: 2%; position: absolute; width: 90%; left: 50%; transform: translate(-50%, 0); background-color: white; box-shadow: rgb(38, 57, 77) 0px 20px 30px -10px;">
     <div Class="d-flex mx-auto">
@@ -20,26 +21,30 @@
 </MudAppBar>
 
 <div class="mainblock">
-    <div style="flex: 50%; ">
+    <div style="flex: 50%; overflow: scroll;">
         <MudTable Items="@equipment" Filter="new Func<Equipment,bool>(FilterFunc1)" @bind-SelectedItem="selectedItem1">
             <ToolBarContent>
                 <MudText Typo="Typo.h6">Оборудование</MudText>
                 <MudSpacer />
                 <MudTextField @bind-Value="searchString1" Placeholder="Search" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0"></MudTextField>
                 <MudSpacer />
-                <MudButton Variant="Variant.Outlined" Href="/managerEquipment">Добавить</MudButton>
+                <MudButton Variant="Variant.Outlined" Href="/managerEquipmentAdd">Добавить</MudButton>
             </ToolBarContent>
             <HeaderContent>
+@*                <MudTh>Номер</MudTh>*@
                 <MudTh>Название</MudTh>
-                <MudTh>Начало эксплуатации</MudTh>
-                <MudTh>Конец эксплуатации</MudTh>
+@*                <MudTh>Начало эксплуатации</MudTh>
+                <MudTh>Конец эксплуатации</MudTh>*@
+                <MudTh>Ответственный</MudTh>
                 <MudTh>Просмотреть</MudTh>
             </HeaderContent>
             <RowTemplate>
+@*                <MudTd DataLabel="Номер">@context.Id</MudTd>*@
                 <MudTd DataLabel="Название">@context.Title</MudTd>
-                <MudTd DataLabel="Начало эксплуатации">@context.DateBegin</MudTd>
-                <MudTd DataLabel="Конец эксплуатации">@context.DateEnd</MudTd>
-                <MudTd DataLabel="Просмотреть"><MudButton Variant="Variant.Outlined" Color="Color.Info">Просмотр</MudButton></MudTd>
+@*                <MudTd DataLabel="Начало эксплуатации">@context.DateBegin.ToShortDateString()</MudTd>
+                <MudTd DataLabel="Конец эксплуатации">@context.DateEnd.ToShortDateString()</MudTd>*@
+                <MudTd DataLabel="Ответственный">@context.User.Surname @context.User.Name</MudTd>
+                <MudTd DataLabel="Просмотреть"><MudButton Variant="Variant.Outlined" Color="Color.Info" OnClick="() => NavigationToEquipmentInfo(context.Title)">Просмотр</MudButton></MudTd>
             </RowTemplate>
         </MudTable>
     </div>
@@ -57,6 +62,11 @@
     protected override void OnInitialized()
     {
         equipment = DBConnection.ImportAllEquipments();
+    }
+
+    public void NavigationToEquipmentInfo(string equipment)
+    {
+        navigation.NavigateTo($"/managerEquipment/{equipment}");
     }
 
     private bool FilterFunc1(Equipment element) => FilterFunc(element, searchString1);

@@ -41,7 +41,7 @@
             </HeaderContent>
             <RowTemplate>
                 <MudTd DataLabel="Описание">@context.TaskInfo</MudTd>
-                <MudTd DataLabel="Выполнение"><MudCheckBox @bind-Checked="@context.isDone" Class="d-flex mx-auto" Color="Color.Info"></MudCheckBox></MudTd>
+                <MudTd DataLabel="Выполнение"><MudCheckBox @bind-Checked="@context.isDone" Class="d-flex mx-auto" Color="Color.Info" @onclick="() => RadioButtonChanged(context)"></MudCheckBox></MudTd>
             </RowTemplate>
 @*            <PagerContent>
                 <MudTablePager PageSizeOptions="new int[] { 2 }" />
@@ -71,7 +71,6 @@
 </div>
 
 @code {
-    List<Data.Task> tasks = new List<Data.Task>();
     private IEnumerable<Analyze> ListOfAnalyzes = new List<Analyze>();
     private int analyzes;
     private IEnumerable<Analyze> ListOfMyAnalyzes = new List<Analyze>();
@@ -99,6 +98,15 @@
         Elements = DBConnection.ImportTasksOfWorker(currentUser.CurrentUserData);
 
         UpdateChart();
+    }
+
+    public async void RadioButtonChanged(Data.Task task)
+    {
+        task.isDone = !task.isDone;
+        DBConnection.ReplaceTask(task);
+        StateHasChanged();
+        Elements = null;
+        Elements = DBConnection.ImportTasksOfWorker(currentUser.CurrentUserData);
     }
 
     private void UpdateChart()

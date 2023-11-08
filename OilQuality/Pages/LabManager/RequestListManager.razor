@@ -20,7 +20,7 @@
 </MudAppBar>
 
 <div class="mainblock">
-    <div style="flex: 50%; ">
+    <div style="flex: 50%; overflow: scroll;">
         <MudTable Items="@analyzes" Filter="new Func<Analyze,bool>(FilterFunc1)" @bind-SelectedItem="selectedItem1">
             <ToolBarContent>
                 <MudText Typo="Typo.h6">Заявки</MudText>
@@ -33,19 +33,12 @@
                 <MudTh>Номер</MudTh>
                 <MudTh>Тип</MudTh>
                 <MudTh>Месторождение</MudTh>
-                @*                <MudTh>Position</MudTh>
-                <MudTh>Molar mass</MudTh>*@
             </HeaderContent>
             <RowTemplate>
                 <MudTd DataLabel="Фамилия">@context.Title</MudTd>
                 <MudTd DataLabel="Имя">@context.Type</MudTd>
                 <MudTd DataLabel="Отчество">@context.Deposit</MudTd>
-                @*                <MudTd DataLabel="Position">@context.Position</MudTd>
-                <MudTd DataLabel="Molar mass">@context.Molar</MudTd>*@
             </RowTemplate>
-            <PagerContent>
-                <MudTablePager />
-            </PagerContent>
         </MudTable>
     </div>
     <div style="flex: 49%;">
