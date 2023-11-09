@@ -43,27 +43,7 @@
                 <MudTd DataLabel="Описание">@context.TaskInfo</MudTd>
                 <MudTd DataLabel="Выполнение"><MudCheckBox @bind-Checked="@context.isDone" Class="d-flex mx-auto" Color="Color.Info" @onclick="() => RadioButtonChanged(context)"></MudCheckBox></MudTd>
             </RowTemplate>
-@*            <PagerContent>
-                <MudTablePager PageSizeOptions="new int[] { 2 }" />
-            </PagerContent>*@
         </MudTable>
-        @*<table class="table">
-            <thead>
-                <tr>
-                    <th class="thStyle">Задание</th>
-                    <th class="thStyle">Выполнение</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var task in tasks)
-                {
-                    <tr>
-                        <td class="tdStyle">@task.TaskInfo</td>
-                        <td class="tdStyle"><input type="checkbox" checked="@task.isDone"><label></label></td>
-                    </tr>
-                }
-            </tbody>
-        </table>*@
     </div>
     <div style="width: 49%; height: 49%; box-shadow: rgb(38, 57, 77) 0px 5px 10px -0px;">
         <img src='/css//Mesh-20.png' style="width: 100%; height:100%; object-fit: cover; overflow: hidden">

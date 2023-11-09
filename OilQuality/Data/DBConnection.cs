@@ -46,6 +46,14 @@ namespace OilQuality.Data
             var user = collection.DeleteOne(x => x == equipment);
         }
 
+        public static void DeleteAnalyzeFromDataBase(Analyze analyze)
+        {
+            var client = new MongoClient("mongodb://localhost:27017");
+            var database = client.GetDatabase("OilQuality");
+            var collection = database.GetCollection<Analyze>("CollectionOfAnalyzes");
+            var user = collection.DeleteOne(x => x.Title == analyze.Title);
+        }
+
         public static void AddAnalyzeToDataBase(Analyze analyze)
         {
             var client = new MongoClient("mongodb://localhost:27017");

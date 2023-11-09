@@ -1,4 +1,4 @@
-﻿@page "/analyzeOrReq/{analyzeId}"
+﻿@page "/analyzeManager/{analyzeId}"
 @using OilQuality.Data;
 @inject ISnackbar Snackbar
 @inject NavigationManager navigation;
@@ -8,16 +8,16 @@
 
 <MudAppBar Style="margin-top: 2%; position: absolute; width: 90%; left: 50%; transform: translate(-50%, 0); background-color: white; box-shadow: rgb(38, 57, 77) 0px 20px 30px -10px;">
     <div Class="d-flex mx-auto">
-        <MudButton Href="/worker">
+        <MudButton Href="/manager">
             Главная страница
         </MudButton>
-        <MudButton Href="/requestList">
+        <MudButton Href="/requestListManager">
             Заявки
         </MudButton>
-        <MudButton Href="/myAnalyzeList">
+        <MudButton Href="/allAnalyzeList">
             Выполненные анализы
         </MudButton>
-        <MudButton Href="/workerEquipList">
+        <MudButton Href="/managerEquipList">
             Оборудование
         </MudButton>
     </div>
@@ -46,11 +46,11 @@
         </MudText>
         <MudTextField T="String" Variant="Variant.Text" Style="font-size: 16px; margin: 0; margin-bottom: 10px" @bind-Value="@indicator" Disabled=true />
         <MudText Style="font-size: 16px; margin: 0">
-            Метод: 
+            Метод:
         </MudText>
         <MudTextField T="String" Variant="Variant.Text" Style="font-size: 16px; margin: 0; margin-bottom: 10px" @bind-Value="@method" Disabled=true />
         <MudText Style="font-size: 16px;">
-            Результат: 
+            Результат:
         </MudText>
         <MudTextField T="String" Variant="Variant.Text" Style="font-size: 16px; margin: 0; margin-bottom: 10px" @bind-Value="@result" Disabled=disabled />
         @if (!disabled)
@@ -99,7 +99,6 @@
         depositActual = analyze.Deposit;
     }
 
-    
 
     public void RegistrationNewAnalyze()
     {

@@ -1,5 +1,6 @@
 ﻿@page "/allAnalyzeList"
 @using Data;
+@inject NavigationManager navigation;
 
 <MudAppBar Style="margin-top: 2%; position: absolute; width: 90%; left: 50%; transform: translate(-50%, 0); background-color: white; box-shadow: rgb(38, 57, 77) 0px 20px 30px -10px;">
     <div Class="d-flex mx-auto">
@@ -33,20 +34,13 @@
                 <MudTh>Тип</MudTh>
                 <MudTh>Месторождение</MudTh>
                 <MudTh>Просмотреть</MudTh>
-                @*                <MudTh>Position</MudTh>
-                <MudTh>Molar mass</MudTh>*@
             </HeaderContent>
             <RowTemplate>
                 <MudTd DataLabel="Номер">@context.Title</MudTd>
                 <MudTd DataLabel="Тип">@context.Type</MudTd>
                 <MudTd DataLabel="Месторождение">@context.Deposit</MudTd>
-                <MudTd DataLabel="Просмотреть"><MudButton Variant="Variant.Outlined" Color="Color.Info">Просмотр</MudButton></MudTd>
-                @*                <MudTd DataLabel="Position">@context.Position</MudTd>
-                <MudTd DataLabel="Molar mass">@context.Molar</MudTd>*@
+                <MudTd DataLabel="Просмотреть"><MudButton Variant="Variant.Outlined" Color="Color.Info" OnClick="() => NavigationToAnalyze(context.Title)">Просмотр</MudButton></MudTd>
             </RowTemplate>
-            @*            <PagerContent>
-            <MudTablePager />
-            </PagerContent>*@
         </MudTable>
     </div>
     <div style="flex: 49%;">
@@ -78,6 +72,11 @@
         if ($"{element.Deposit}".Contains(searchString))
             return true;
         return false;
+    }
+
+    public void NavigationToAnalyze(string id)
+    {
+        navigation.NavigateTo($"/analyzeManager/{id}");
     }
 }
 

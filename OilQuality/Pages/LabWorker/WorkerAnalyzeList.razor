@@ -1,5 +1,6 @@
 ﻿@page "/myAnalyzeList"
 @using OilQuality.Data;
+@inject NavigationManager navigation;
 
 <MudAppBar Style="margin-top: 2%; position: absolute; width: 90%; left: 50%; transform: translate(-50%, 0); background-color: white; box-shadow: rgb(38, 57, 77) 0px 20px 30px -10px;">
     <div Class="d-flex mx-auto">
@@ -39,7 +40,7 @@
                 <MudTd DataLabel="Номер">@context.Title</MudTd>
                 <MudTd DataLabel="Тип">@context.Type</MudTd>
                 <MudTd DataLabel="Месторождение">@context.Deposit</MudTd>
-                <MudTd DataLabel="Просмотреть"><MudButton Variant="Variant.Outlined" Color="Color.Info">Просмотр</MudButton></MudTd>
+                <MudTd DataLabel="Просмотреть"><MudButton Variant="Variant.Outlined" Color="Color.Info" OnClick="() => NavigationToAnalyze(context.Title)">Просмотр</MudButton></MudTd>
             </RowTemplate>
         </MudTable>
     </div>
@@ -57,6 +58,11 @@
     protected override void OnInitialized()
     {
         workers = DBConnection.ImportOnlyAnalyzes();
+    }
+
+    public void NavigationToAnalyze(string id)
+    {
+        navigation.NavigateTo($"/analyzeOrReq/{id}");
     }
 
     private bool FilterFunc1(Analyze element) => FilterFunc(element, searchString1);

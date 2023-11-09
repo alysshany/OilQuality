@@ -1,5 +1,7 @@
 ﻿@page "/requestListManager"
 @using Data;
+@inject ISnackbar Snackbar
+@inject NavigationManager navigation;
 
 <MudAppBar Style="margin-top: 2%; position: absolute; width: 90%; left: 50%; transform: translate(-50%, 0); background-color: white; box-shadow: rgb(38, 57, 77) 0px 20px 30px -10px;">
     <div Class="d-flex mx-auto">
@@ -33,11 +35,13 @@
                 <MudTh>Номер</MudTh>
                 <MudTh>Тип</MudTh>
                 <MudTh>Месторождение</MudTh>
+                <MudTh>Удалить</MudTh>
             </HeaderContent>
             <RowTemplate>
                 <MudTd DataLabel="Фамилия">@context.Title</MudTd>
                 <MudTd DataLabel="Имя">@context.Type</MudTd>
                 <MudTd DataLabel="Отчество">@context.Deposit</MudTd>
+                <MudTd DataLabel="Удалить"><MudButton Variant="Variant.Outlined" Color="Color.Info" OnClick="() => NavigationToAnalyze(context.Title)">Удалить</MudButton></MudTd>
             </RowTemplate>
         </MudTable>
     </div>
@@ -70,6 +74,14 @@
         if ($"{element.Deposit}".Contains(searchString))
             return true;
         return false;
+    }
+
+    public void NavigationToAnalyze(string id)
+    {
+        Analyze analyze = DBConnection.FindAnalyzeByTitle(id);
+        DBConnection.DeleteAnalyzeFromDataBase(analyze);
+        Snackbar.Add("Успешно удалено", Severity.Success);
+        analyzes = DBConnection.ImportOnlyApplications();
     }
 }
 
