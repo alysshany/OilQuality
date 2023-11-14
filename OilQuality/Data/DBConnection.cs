@@ -188,6 +188,15 @@ namespace OilQuality.Data
             collection.ReplaceOne(filter, user);
         }
 
+        public static void ReplaceEquipment(Equipment equipment)
+        {
+            var client = new MongoClient("mongodb://localhost:27017");
+            var database = client.GetDatabase("OilQuality");
+            var filter = new BsonDocument("_id", equipment.Id);
+            var collection = database.GetCollection<Equipment>("CollectionOfEquipments");
+            collection.ReplaceOne(filter, equipment);
+        }
+
         public static void ReplaceTask(Task task)
         {
             var client = new MongoClient("mongodb://localhost:27017");

@@ -37,24 +37,43 @@
         <MudText Style="font-size: 16px">
             Дата начала эксплуатации:
         </MudText>
-        <MudTextField T="DateTime?" Variant="Variant.Text" Style="font-size: 16px; margin: 0; margin-bottom: 10px" @bind-Value="@dateBegin" />
+        <MudTextField T="DateTime" Variant="Variant.Text" Style="font-size: 16px; margin: 0; margin-bottom: 10px" @bind-Value="@dateBegin" />
         <MudText Style="font-size: 16px">
             Дата конца эксплуатации:
         </MudText>
-        <MudTextField T="DateTime?" Variant="Variant.Text" Style=" font-size: 16px; margin: 0; margin-bottom: 10px " @bind-Value="@dateEnd" />
+        <MudTextField T="DateTime" Variant="Variant.Text" Style=" font-size: 16px; margin: 0; margin-bottom: 10px " @bind-Value="@dateEnd" />
         <MudText Style="font-size: 16px; margin: 0">
             Ответсвенный:
         </MudText>
         <MudSelect T="String" @bind-Value="@workerLogin" Style="font-size: 16px; margin: 0; margin-bottom: 10px">
             @foreach (var worker in listOfUsers)
             {
-                <MudSelectItem Value="@worker.Surname" />
+                <MudSelectItem Value="@worker.Surname">
+                    @worker.Surname @worker.Name @worker.Patronymic
+                </MudSelectItem>
             }
         </MudSelect>
         <br />
-        <MudButton Variant="Variant.Outlined" Color="Color.Info" Class="d-flex mx-auto" Style="margin: 15px" @onclick="RegistrationEquip">
+        @if (!newOne)
+        {
+            <div Class="d-flex mx-auto" style="display: inline-block;">
+                <MudButton Variant="Variant.Outlined" Color="Color.Info" Class="d-flex mx-auto" Style="margin: 15px" @onclick="RegistrationEquip">
+                    Сохранить
+                </MudButton>
+                <MudButton Variant="Variant.Outlined" Color="Color.Info" Class="d-flex mx-auto" Style="margin: 15px" @onclick="DeletingEquipment">
+                    Удалить
+                </MudButton>
+            </div>
+        }
+        else
+        {
+            <MudButton Variant="Variant.Outlined" Color="Color.Info" Class="d-flex mx-auto" Style="margin: 15px" @onclick="RegistrationEquip">
+                Сохранить
+            </MudButton>
+        }
+@*        <MudButton Variant="Variant.Outlined" Color="Color.Info" Class="d-flex mx-auto" Style="margin: 15px" @onclick="RegistrationEquip">
             Сохранить
-        </MudButton>
+        </MudButton>*@
     </div>
 
 </div>
@@ -62,10 +81,11 @@
 @code {
     string? title;
     string? workerLogin;
-    DateTime? dateBegin;
-    DateTime? dateEnd;
+    DateTime dateBegin;
+    DateTime dateEnd;
     List<User> listOfUsers;
     Equipment equipment;
+    bool newOne;
 
     [Parameter]
     public string? equipmentId { get; set; }
@@ -74,6 +94,9 @@
     protected override void OnInitialized()
     {
         listOfUsers = DBConnection.ImportAllLabWorkers();
+        newOne = true;
+        dateBegin = DateTime.Today;
+        dateEnd = DateTime.Today;
 
         if (equipmentId != null)
         {
@@ -83,34 +106,90 @@
             dateBegin = equipment.DateBegin;
             dateEnd = equipment.DateEnd;
             workerLogin = equipment.User.Surname;
+            newOne = false;
         }
+    }
+
+    public void DeletingEquipment()
+    {
+        DBConnection.DeleteEquipmnetFromDataBase(equipment);
+        navigation.NavigateTo("/workerEquipList");
+        Snackbar.Add("Успешно удалено", Severity.Success);
     }
 
     public void RegistrationEquip()
     {
-        if (title != null && dateBegin != null && dateEnd != null && workerLogin != null)
+        if (newOne)
         {
-            var worker = DBConnection.FindUserByLogin(workerLogin);
-
-            Equipment equipment = new Equipment()
+            if (title != null && dateBegin != null && dateEnd != null && workerLogin != null)
+            {
+                if (DBConnection.FindEquipmentByTitle(title) == null)
                 {
-                    Title = title,
-                    User = worker,
-                    DateBegin = (DateTime)dateBegin,
-                    DateEnd = (DateTime)dateEnd,
+                    if (dateBegin < dateEnd)
+                    {
+                        var worker = DBConnection.FindUserByLogin(workerLogin);
 
-                };
+                        Equipment equipment = new Equipment()
+                        {
+                            Title = title,
+                            User = worker,
+                            DateBegin = (DateTime)dateBegin,
+                            DateEnd = (DateTime)dateEnd,
 
-            DBConnection.AddEquipmentToDataBase(equipment);
+                        };
 
-            Snackbar.Add("Оборудование добавлено", Severity.Success);
+                        DBConnection.AddEquipmentToDataBase(equipment);
 
-            navigation.NavigateTo("/manager");
+                        Snackbar.Add("Оборудование добавлено", Severity.Success);
 
+                        navigation.NavigateTo("/manager");
+                    }
+                    else
+                    {
+                        Snackbar.Add("Неправильные даты", Severity.Error);
+                    }
+                }
+                else
+                {
+                    Snackbar.Add("Такое оборудование существует!", Severity.Error);
+                }
+
+            }
+            else
+            {
+                Snackbar.Add("Не все необходимые поля заполнены.", Severity.Error);
+            }
         }
         else
         {
-            Snackbar.Add("Не все необходимые поля заполнены.", Severity.Error);
+            if (title != null && dateBegin != null && dateEnd != null && workerLogin != null)
+            {
+                if (dateBegin < dateEnd)
+                {
+                    var worker = DBConnection.FindUserByLogin(workerLogin);
+
+                    equipment.Title = title;
+                    equipment.DateBegin = dateBegin;
+                    equipment.DateEnd = dateEnd;
+                    equipment.User = worker;
+
+
+                    DBConnection.ReplaceEquipment(equipment);
+
+                    Snackbar.Add("Успешно", Severity.Success);
+
+                    navigation.NavigateTo("/manager");
+                }
+                else
+                {
+                    Snackbar.Add("Неправильные даты", Severity.Error);
+                }
+
+            }
+            else
+            {
+                Snackbar.Add("Не все необходимые поля заполнены.", Severity.Error);
+            }
         }
     }
 }

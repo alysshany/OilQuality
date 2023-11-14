@@ -39,7 +39,7 @@
                 <MudTd DataLabel="Номер">@context.Title</MudTd>
                 <MudTd DataLabel="Тип">@context.Type</MudTd>
                 <MudTd DataLabel="Месорождение">@context.Deposit</MudTd>
-                <MudTd DataLabel="Провести"><MudButton OnClick="() => NavigationToAnalyze(context.Title)">Провести</MudButton></MudTd>
+                <MudTd DataLabel="Провести"><MudButton Color="Color.Info" Variant="Variant.Outlined" OnClick="() => NavigationToAnalyze(context.Title)">Провести</MudButton></MudTd>
             </RowTemplate>
         </MudTable>
     </div>

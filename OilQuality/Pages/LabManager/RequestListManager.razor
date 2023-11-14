@@ -35,13 +35,13 @@
                 <MudTh>Номер</MudTh>
                 <MudTh>Тип</MudTh>
                 <MudTh>Месторождение</MudTh>
-                <MudTh>Удалить</MudTh>
+                <MudTh>Просмотреть</MudTh>
             </HeaderContent>
             <RowTemplate>
                 <MudTd DataLabel="Фамилия">@context.Title</MudTd>
                 <MudTd DataLabel="Имя">@context.Type</MudTd>
                 <MudTd DataLabel="Отчество">@context.Deposit</MudTd>
-                <MudTd DataLabel="Удалить"><MudButton Variant="Variant.Outlined" Color="Color.Info" OnClick="() => NavigationToAnalyze(context.Title)">Удалить</MudButton></MudTd>
+                <MudTd DataLabel="Просмотреть"><MudButton Variant="Variant.Outlined" Color="Color.Info" OnClick="() => NavigationToAnalyze(context.Title)">Просмотреть</MudButton></MudTd>
             </RowTemplate>
         </MudTable>
     </div>
@@ -78,10 +78,12 @@
 
     public void NavigationToAnalyze(string id)
     {
-        Analyze analyze = DBConnection.FindAnalyzeByTitle(id);
-        DBConnection.DeleteAnalyzeFromDataBase(analyze);
-        Snackbar.Add("Успешно удалено", Severity.Success);
-        analyzes = DBConnection.ImportOnlyApplications();
+        //Analyze analyze = DBConnection.FindAnalyzeByTitle(id);
+        //DBConnection.DeleteAnalyzeFromDataBase(analyze);
+        //Snackbar.Add("Успешно удалено", Severity.Success);
+        //analyzes = DBConnection.ImportOnlyApplications();
+
+        navigation.NavigateTo($"/requestAdd/{id}");
     }
 }
 

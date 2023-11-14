@@ -1,6 +1,7 @@
 ﻿@page "/myAnalyzeList"
 @using OilQuality.Data;
 @inject NavigationManager navigation;
+@inject CurrentUser currentUser;
 
 <MudAppBar Style="margin-top: 2%; position: absolute; width: 90%; left: 50%; transform: translate(-50%, 0); background-color: white; box-shadow: rgb(38, 57, 77) 0px 20px 30px -10px;">
     <div Class="d-flex mx-auto">
@@ -57,7 +58,7 @@
 
     protected override void OnInitialized()
     {
-        workers = DBConnection.ImportOnlyAnalyzes();
+        workers = DBConnection.ImportOnlyAnalyzesOfWorker(currentUser.CurrentUserData);
     }
 
     public void NavigationToAnalyze(string id)

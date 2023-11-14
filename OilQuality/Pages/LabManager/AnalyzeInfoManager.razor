@@ -53,6 +53,9 @@
             Результат:
         </MudText>
         <MudTextField T="String" Variant="Variant.Text" Style="font-size: 16px; margin: 0; margin-bottom: 10px" @bind-Value="@result" Disabled=disabled />
+        <MudText Style="font-size: 16px; margin: 0">
+            Лаборант: @user.Surname @user.Name @user.Patronymic
+        </MudText>
         @if (!disabled)
         {
             <MudButton Variant="Variant.Outlined" Color="Color.Info" Class="d-flex mx-auto" Style="margin: 15px" @onclick="RegistrationNewAnalyze">
@@ -73,6 +76,7 @@
     bool disabled;
 
     Analyze analyze;
+    User user;
 
     [Parameter]
     public string? analyzeId { get; set; }
@@ -97,6 +101,8 @@
         indicator = analyze.DefinedIndicatorData;
         method = analyze.MethodData;
         depositActual = analyze.Deposit;
+
+        user = DBConnection.FindUserByLogin(analyze.WorkerData.Login);
     }
 
 

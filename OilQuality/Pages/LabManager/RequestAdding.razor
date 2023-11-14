@@ -1,5 +1,6 @@
 ﻿@page "/requestadd"
 @page "/analyze"
+@page "/requestAdd/{requestId}"
 @using OilQuality.Data;
 @inject ISnackbar Snackbar
 @inject NavigationManager navigation;
@@ -30,17 +31,14 @@
         <img src='/css//Mesh-20.png' style="width: 100%; height:100%; object-fit: cover; overflow: hidden; box-shadow: rgb(38, 57, 77) 0px 20px 30px -10px;">
     </div>
     <div style="width: 50%; margin: 25px; padding: 25px; ">
-        <MudText Style="font-size: 18px; text-align: center; margin: 10px">
-            АНАЛИЗ
-        </MudText>
         <MudText Style="font-size: 16px">
             Номер:
         </MudText>
-        <MudTextField T="String" Variant="Variant.Text" Style="font-size: 16px; margin: 0; margin-bottom: 10px" @bind-Value="@title" />
+        <MudTextField T="String" Variant="Variant.Text" Style="font-size: 16px; margin: 0; margin-bottom: 10px" @bind-Value="@title" Disabled="!newOne" />
         <MudText Style="font-size: 16px">
             Объект исследования:
         </MudText>
-        <MudSelect T="String" ValueChanged="TypeChange" Style="font-size: 16px; margin: 0; margin-bottom: 10px">
+        <MudSelect T="String" ValueChanged="TypeChange" Value="@type" Style="font-size: 16px; margin: 0; margin-bottom: 10px">
             <MudSelectItem Value="@("Вода")" />
             <MudSelectItem Value="@("Нефть")" />
         </MudSelect>
@@ -66,9 +64,23 @@
             Метод: @method
         </MudText>
         <br />
-        <MudButton Variant="Variant.Outlined" Color="Color.Info" Class="d-flex mx-auto" Style="margin: 15px" @onclick="RegistrationNewAnalyze">
-            Сохранить
-        </MudButton>
+        @if (!newOne)
+        {
+            <div Class="d-flex mx-auto" style="display: inline-block;">
+                <MudButton Variant="Variant.Outlined" Color="Color.Info" Class="d-flex mx-auto" Style="margin: 15px" @onclick="RegistrationNewAnalyze">
+                    Сохранить
+                </MudButton>
+                <MudButton Variant="Variant.Outlined" Color="Color.Info" Class="d-flex mx-auto" Style="margin: 15px" @onclick="DeletingAnalyze">
+                    Удалить
+                </MudButton>
+            </div>
+        }
+        else
+        {
+            <MudButton Variant="Variant.Outlined" Color="Color.Info" Class="d-flex mx-auto" Style="margin: 15px" @onclick="RegistrationNewAnalyze">
+                Сохранить
+            </MudButton>
+        }
     </div>
 
 </div>
@@ -79,12 +91,20 @@
     string? indicator;
     string? method;
     string? depositActual;
+    bool newOne;
 
     List<string> deposits;
     List<string> indicators;
 
+    Analyze analyze;
+
+    [Parameter]
+    public string? requestId { get; set; }
+
     protected override void OnInitialized()
     {
+        newOne = true;
+
         deposits = new List<string>()
         {
             ""
@@ -94,6 +114,49 @@
         {
             ""
         };
+
+        if (requestId != null)
+        {
+            analyze = DBConnection.FindAnalyzeByTitle(requestId);
+
+            //if (analyze.ResultData == null)
+            //{
+            //    disabled = false;
+            //}
+            //else
+            //{
+            //    disabled = true;
+
+            //    result = analyze.ResultData;
+            //}
+
+            title = analyze.Title;
+            type = analyze.Type;
+            indicator = analyze.DefinedIndicatorData;
+            method = analyze.MethodData;
+            depositActual = analyze.Deposit;
+
+            TypeChange(type);
+            IndicatorChange(indicator);
+
+            type = analyze.Type;
+            indicator = analyze.DefinedIndicatorData;
+            method = analyze.MethodData;
+            depositActual = analyze.Deposit;
+
+            newOne = false;
+        }
+    }
+
+    public void DeletingAnalyze()
+    {
+        Analyze analyz = DBConnection.FindAnalyzeByTitle(analyze.Title);
+        DBConnection.DeleteAnalyzeFromDataBase(analyz);
+        //Snackbar.Add("Успешно удалено", Severity.Success);
+        //analyzes = DBConnection.ImportOnlyApplications();
+
+        Snackbar.Add("Успешно", Severity.Success);
+        navigation.NavigateTo("/requestListManager");
     }
 
     public void IndicatorChange(string selected)
@@ -145,25 +208,40 @@
         if (title != null && type != null && indicator != null &&
             method != null && depositActual != null)
         {
-            if (DBConnection.FindAnalyzeByTitle(title) == null)
+            if (newOne)
             {
-                Analyze analyzeData = new Analyze()
+                if (DBConnection.FindAnalyzeByTitle(title) == null)
                 {
-                    Title = title,
-                    Type = type,
-                    DefinedIndicatorData = indicator,
-                    Deposit = depositActual,
-                    MethodData = method
-                };
-                DBConnection.AddAnalyzeToDataBase(analyzeData);
+                    Analyze analyzeData = new Analyze()
+                        {
+                            Title = title,
+                            Type = type,
+                            DefinedIndicatorData = indicator,
+                            Deposit = depositActual,
+                            MethodData = method
+                        };
+                    DBConnection.AddAnalyzeToDataBase(analyzeData);
 
-                Snackbar.Add("Успешно", Severity.Success);
-                navigation.NavigateTo("/manager");
+                    Snackbar.Add("Успешно", Severity.Success);
+                    navigation.NavigateTo("/requestListManager");
 
+                }
+                else
+                {
+                    Snackbar.Add("Анализ с таким номером уже существует.", Severity.Error);
+                }
             }
             else
             {
-                Snackbar.Add("Анализ с таким номером уже существует.", Severity.Error);
+                analyze.Title = title;
+                analyze.Type = type;
+                analyze.DefinedIndicatorData = indicator;
+                analyze.MethodData = method;
+                analyze.Deposit = depositActual;
+
+                DBConnection.ReplaceAnalyze(analyze);
+                Snackbar.Add("Успешно", Severity.Success);
+                navigation.NavigateTo("/requestListManager");
             }
         }
         else

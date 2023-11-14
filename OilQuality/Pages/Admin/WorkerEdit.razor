@@ -50,9 +50,23 @@
             <MudSelectItem Value="@("Заведующий")" />
         </MudSelect>
         <br />
-        <MudButton Variant="Variant.Outlined" Color="Color.Info" Class="d-flex mx-auto" Style="margin: 15px" @onclick="RegistrationLabWorker">
-            Сохранить
-        </MudButton>
+        @if (!newOne)
+        {
+            <div Class="d-flex mx-auto" style="display: inline-block;">
+                <MudButton Variant="Variant.Outlined" Color="Color.Info" Class="d-flex mx-auto" Style="margin: 15px" @onclick="RegistrationLabWorker">
+                    Сохранить
+                </MudButton>
+                <MudButton Variant="Variant.Outlined" Color="Color.Info" Class="d-flex mx-auto" Style="margin: 15px" @onclick="DeletingWorker">
+                    Удалить
+                </MudButton>
+            </div>
+        }
+        else
+        {
+            <MudButton Variant="Variant.Outlined" Color="Color.Info" Class="d-flex mx-auto" Style="margin: 15px" @onclick="RegistrationLabWorker">
+                Сохранить
+            </MudButton>
+        }
     </div>
 
 </div>
@@ -64,6 +78,7 @@
     string? login;
     string? password; 
     string? role;
+    bool newOne;
 
     User user;
 
@@ -73,6 +88,8 @@
 
     protected override void OnInitialized()
     {
+        newOne = true;
+
         if (workerLogin != null)
         {
             user = DBConnection.FindUserByLogin(workerLogin);
@@ -83,7 +100,16 @@
             login = user.Login;
             password = user.Password;
             role = user.RoleName;
+
+            newOne = false;
         }
+    }
+
+    public void DeletingWorker()
+    {
+        DBConnection.DeleteUserFromDataBase(user);
+        navigation.NavigateTo("/workerslist");
+        Snackbar.Add("Успешно удалено", Severity.Success);
     }
 
     public void RegistrationLabWorker()
@@ -91,11 +117,17 @@
         if (workerLogin != null)
         {if (surname != null && name != null && password != null)
             {
+                user.Surname = surname;
+                user.Name = name;
+                user.Patronymic = patronymic;
+                user.Login = login;
+                user.Password = password;
+                user.RoleName = role;
                 DBConnection.ReplaceUser(user);
 
                 Snackbar.Add("Изменения сохранены", Severity.Success);
 
-                navigation.NavigateTo("/adminViewLabWorker");
+                navigation.NavigateTo("/admin");
             }
             else
             {

@@ -37,18 +37,20 @@
         <MudText Style="font-size: 16px">
             Дата начала эксплуатации:
         </MudText>
-        <MudTextField Format="yyyy-MM-dd" InputType="InputType.Date" T="DateTime?" Variant="Variant.Text" Style="font-size: 16px; margin: 0; margin-bottom: 10px" @bind-Value="@dateBegin" />
+        <MudTextField Format="yyyy-MM-dd" InputType="InputType.Date" T="DateTime" Variant="Variant.Text" Style="font-size: 16px; margin: 0; margin-bottom: 10px" @bind-Value="@dateBegin" />
         <MudText Style="font-size: 16px">
             Дата конца эксплуатации:
         </MudText>
-        <MudTextField Format="yyyy-MM-dd" InputType="InputType.Date" T="DateTime?" Variant="Variant.Text" Style=" font-size: 16px; margin: 0; margin-bottom: 10px " @bind-Value="@dateEnd" />
+        <MudTextField Format="yyyy-MM-dd" InputType="InputType.Date" T="DateTime" Variant="Variant.Text" Style=" font-size: 16px; margin: 0; margin-bottom: 10px " @bind-Value="@dateEnd" />
         <MudText Style="font-size: 16px; margin: 0">
-            Ответсвенный:
+            Ответственный:
         </MudText>
         <MudSelect T="String" @bind-Value="@workerLogin" Style="font-size: 16px; margin: 0">
             @foreach (var worker in listOfUsers)
             {
-                <MudSelectItem Value="@worker.Surname" />
+                <MudSelectItem Value="@worker.Surname">
+                    @worker.Surname @worker.Name @worker.Patronymic
+                </MudSelectItem>
             }
         </MudSelect>
         <br/>
@@ -76,8 +78,8 @@
 @code {
     string? title;
     string? workerLogin;
-    DateTime? dateBegin;
-    DateTime? dateEnd;
+    DateTime dateBegin;
+    DateTime dateEnd;
     List<User> listOfUsers;
     Equipment equipment;
     bool newOne;
@@ -88,6 +90,8 @@
 
     protected override void OnInitialized()
     {
+        dateBegin = DateTime.Today;
+        dateEnd = DateTime.Today;
         listOfUsers = DBConnection.ImportAllLabWorkers();
         newOne = true; 
 
@@ -114,30 +118,72 @@
 
     public void RegistrationLabWorker()
     {
-        if (title != null && dateBegin != null && dateEnd != null && workerLogin != null)
+        if (newOne)
         {
-            var worker = DBConnection.FindUserByLogin(workerLogin);
-
-            Equipment equipment = new Equipment()
+            if (title != null && dateBegin != null && dateEnd != null && workerLogin != null)
             {
-                Title = title,
-                User = worker,
-                DateBegin = (DateTime)dateBegin,
-                DateEnd = (DateTime)dateEnd,
+                if (dateBegin < dateEnd)
+                {
+                    var worker = DBConnection.FindUserByLogin(workerLogin);
 
-            };
+                    Equipment equipment = new Equipment()
+                        {
+                            Title = title,
+                            User = worker,
+                            DateBegin = (DateTime)dateBegin,
+                            DateEnd = (DateTime)dateEnd,
 
-            DBConnection.AddEquipmentToDataBase(equipment);
+                        };
 
-            Snackbar.Add("Оборудование добавлено", Severity.Success);
+                    DBConnection.AddEquipmentToDataBase(equipment);
 
-            navigation.NavigateTo("/manager");
+                    Snackbar.Add("Оборудование добавлено", Severity.Success);
 
+                    navigation.NavigateTo("/manager");
+                }
+                else
+                {
+                    Snackbar.Add("Неправильные даты", Severity.Error);
+                }
+
+            }
+            else
+            {
+                Snackbar.Add("Не все необходимые поля заполнены.", Severity.Error);
+            }
         }
         else
         {
-            Snackbar.Add("Не все необходимые поля заполнены.", Severity.Error);
+            if (title != null && dateBegin != null && dateEnd != null && workerLogin != null)
+            {
+                if (dateBegin < dateEnd)
+                {
+                    var worker = DBConnection.FindUserByLogin(workerLogin);
+
+                    equipment.Title = title;
+                    equipment.DateBegin = dateBegin;
+                    equipment.DateEnd = dateEnd;
+                    equipment.User = worker;
+
+
+                    DBConnection.ReplaceEquipment(equipment);
+
+                    Snackbar.Add("Успешно", Severity.Success);
+
+                    navigation.NavigateTo("/manager");
+                }
+                else
+                {
+                    Snackbar.Add("Неправильные даты", Severity.Error);
+                }
+
+            }
+            else
+            {
+                Snackbar.Add("Не все необходимые поля заполнены.", Severity.Error);
+            }
         }
+
         //if (workerLogin != null)
         //{
         //    if (surname != null && name != null && password != null)
