@@ -1,5 +1,6 @@
 ﻿@page "/manager"
 @using OilQuality.Data;
+@using Radzen.Blazor
 
 <MudAppBar Style="margin-top: 2%; position: absolute; width: 90%; left: 50%; transform: translate(-50%, 0); background-color: white; box-shadow: rgb(38, 57, 77) 0px 20px 30px -10px;">
     <div Class="d-flex mx-auto">
@@ -23,17 +24,21 @@
     <div style="width: 49%; height: 49%; box-shadow: rgb(38, 57, 77) 0px 5px 10px -0px;">
         <img src='/css//Mesh-20.png' style="width: 100%; height:100%; object-fit: cover; overflow: hidden">
     </div>
-    <div style="background-color: white; width: 49%; height: 49%; box-shadow: rgb(38, 57, 77) 0px 5px 10px -0px; align-items: center">
+    <div style="background-color: white; width: 49%; height: 49%; box-shadow: rgb(38, 57, 77) 0px 5px 10px -0px; align-items: center; overflow: scroll">
 
-        <MudChart ChartType="ChartType.Donut" LegendPosition="Position.Right" Width="260px" Height="260px"
-                  InputData="@data" InputLabels="@labels">
-        </MudChart>
+        <RadzenChart ColorScheme="ColorScheme.Palette" Style="width: 100%; height: 100%; ">
+        <RadzenDonutSeries Data="@revenue" CategoryProperty="WorkersSurname" ValueProperty="CountOfAnalyze">
+                <TitleTemplate>
+                    <div class="rz-donut-content">
+                        <div>Анализы</div>
+                    </div>
+                </TitleTemplate>
+            </RadzenDonutSeries>
+        </RadzenChart>
         
     </div>
     <div style="background-color: white; width: 49%; height: 49%; box-shadow: rgb(38, 57, 77) 0px 5px 10px -0px; display: flex; align-items: center; justify-content: center ">
-        @*<div style="display: flex; align-items: center; justify-content: center">*@
-            <MudButton Variant="Variant.Outlined" Color="Color.Info" Style="width: 40%; margin: 5px; align-self: center;" Href="/taskAdding">Выдать задание</MudButton>
-        @*</div>*@
+        <MudButton Variant="Variant.Outlined" Color="Color.Info" Style="width: 40%; margin: 5px; align-self: center;" Href="/taskAdding">Выдать задание</MudButton>
     </div>
     <div style="width: 49%; height: 49%; box-shadow: rgb(38, 57, 77) 0px 5px 10px -0px;">
         <img src='/css//Mesh-20.png' style="width: 100%; height:100%; object-fit: cover; overflow: hidden">
@@ -47,6 +52,7 @@
     private int requests;
     private IEnumerable<User> ListOfUsers = new List<User>();
     private int users;
+    List<DataItem> revenue = new List<DataItem>();
 
     DateTime? date = null;
     string dateFormat = "dd.MM.yyyy";
@@ -68,42 +74,19 @@
         UpdateChart();
     }
 
+    class DataItem
+    {
+        public string WorkersSurname { get; set; }
+        public int CountOfAnalyze { get; set; }
+    }
+
     private void UpdateChart()
     {
-        dataList.Clear();
-        labelsList.Clear();
-
-        labelsList.Add("Заявки");
-
-        dataList.Add(requests);
-
-        labelsList.Add("Анализы");
-
-        dataList.Add(analyzes);
-
-        //foreach (var cl in ListOfUsers)
-        //{
-        //    List<User> lessons = ;
-
-        //    if (lessons != null && date != null)
-        //    {
-        //        foreach (var todayLesson in lessons)
-        //        {
-        //            var lessonDate = Convert.ToDateTime(todayLesson.TimeStart).Day;
-
-        //            if (Convert.ToDateTime(date).Day == lessonDate)
-        //            {
-        //                int attend = EducationClubContext.Attendences.Where(x => x.LessonId == todayLesson.Id).Count();
-
-        //                labelsList.Add(todayLesson.Title);
-        //                dataList.Add(attend);
-        //            }
-        //        }
-        //    }
-        //}
-
-        data = dataList.ToArray().Select(Convert.ToDouble).ToArray();
-        labels = labelsList.ToArray();
+        foreach (var worker in ListOfUsers)
+        {
+            List<Analyze> analyzes = DBConnection.ImportOnlyAnalyzesOfWorker(worker);
+            revenue.Add(new DataItem { WorkersSurname = worker.Surname, CountOfAnalyze = analyzes.Count });
+        }
     }
 }
 

@@ -1,5 +1,6 @@
 ﻿@page "/worker"
 @using OilQuality.Data;
+@using Radzen.Blazor
 @inject CurrentUser currentUser;
 
 
@@ -26,15 +27,18 @@
         <img src='/css//Mesh-20.png' style="width: 100%; height:100%; object-fit: cover; overflow: hidden">
     </div>
     <div style="background-color: white; width: 49%; height: 49%; box-shadow: rgb(38, 57, 77) 0px 5px 10px -0px;">
-        <MudChart ChartType="ChartType.Donut" LegendPosition="Position.Right" Width="260px" Height="260px"
-                  InputData="@data" InputLabels="@labels">
-        </MudChart>
+        <RadzenChart ColorScheme="ColorScheme.Monochrome" Style="width: 100%; height: 100%; ">
+            <RadzenDonutSeries Data="@revenue" CategoryProperty="Title" ValueProperty="Count">
+                <TitleTemplate>
+                    <div class="rz-donut-content">
+                        <div>Анализы</div>
+                    </div>
+                </TitleTemplate>
+            </RadzenDonutSeries>
+        </RadzenChart>
     </div>
     <div style="background-color: white; width: 49%; height: 49%; box-shadow: rgb(38, 57, 77) 0px 5px 10px -0px; overflow: scroll;">
         <MudTable Items="@Elements" @bind-SelectedItem="selectedItem1" Height="auto">
-@*            <ToolBarContent>
-                <MudText Typo="Typo.h6">Periodic Elements</MudText>
-            </ToolBarContent>*@
             <HeaderContent>
                 <MudTh>Описание</MudTh>
                 <MudTh>Выполнение</MudTh>
@@ -64,6 +68,7 @@
     public string[] labels = new string[] { };
     public double[] data = new double[] { };
     private HashSet<Data.Task> selectedItems = new HashSet<Data.Task>();
+    List<DataItem> revenue = new List<DataItem>();
 
     private IEnumerable<Data.Task> Elements = new List<Data.Task>();
 
@@ -80,6 +85,12 @@
         UpdateChart();
     }
 
+    class DataItem
+    {
+        public string Title { get; set; }
+        public int Count { get; set; }
+    }
+
     public async void RadioButtonChanged(Data.Task task)
     {
         task.isDone = !task.isDone;
@@ -91,40 +102,10 @@
 
     private void UpdateChart()
     {
-        dataList.Clear();
-        labelsList.Clear();
 
-        labelsList.Add("Заявки");
+        revenue.Add(new DataItem { Title = "Заявки", Count = analyzes });
+        revenue.Add(new DataItem { Title = "Анализы", Count = requests });
 
-        dataList.Add(requests);
-
-        labelsList.Add("Анализы");
-
-        dataList.Add(analyzes);
-
-        //foreach (var cl in ListOfUsers)
-        //{
-        //    List<User> lessons = ;
-
-        //    if (lessons != null && date != null)
-        //    {
-        //        foreach (var todayLesson in lessons)
-        //        {
-        //            var lessonDate = Convert.ToDateTime(todayLesson.TimeStart).Day;
-
-        //            if (Convert.ToDateTime(date).Day == lessonDate)
-        //            {
-        //                int attend = EducationClubContext.Attendences.Where(x => x.LessonId == todayLesson.Id).Count();
-
-        //                labelsList.Add(todayLesson.Title);
-        //                dataList.Add(attend);
-        //            }
-        //        }
-        //    }
-        //}
-
-        data = dataList.ToArray().Select(Convert.ToDouble).ToArray();
-        labels = labelsList.ToArray();
     }
 }
 

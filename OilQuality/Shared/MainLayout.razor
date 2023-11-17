@@ -18,6 +18,29 @@
     </main>
 </div>
 
-<MudThemeProvider/>
+<MudThemeProvider Theme="_currentTheme" />
 <MudDialogProvider/>
 <MudSnackbarProvider/>
+
+
+@code{
+    private readonly MudTheme _currentTheme = new()
+        {
+            Palette = new PaletteLight
+            {
+                //TextSecondary = "#21A77F",
+                //TextPrimary = "#21A77F",
+                //Primary = "#21A77F",
+                //Black = "#000000",
+                //White = "#FFFFFF",
+                //Secondary = "#00FF00",
+                //Tertiary = "#0000FF",
+                Success = "#ABCDEF",
+                //Warning = "#FF00FF",
+                Error = "#FF7777",
+                //Dark = "#333333",
+                //Background = "#FFFFFF",
+                //PrimaryDarken = "#21A77F"
+            }
+        };
+}

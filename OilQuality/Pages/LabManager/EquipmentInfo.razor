@@ -33,11 +33,11 @@
         <MudText Style="font-size: 16px">
             Наименование:
         </MudText>
-        <MudTextField T="String" Variant="Variant.Text" Style="font-size: 16px; margin: 0; margin-bottom: 10px" @bind-Value="@title" />
+        <MudTextField T="String" Variant="Variant.Text"  Style="font-size: 16px; margin: 0; margin-bottom: 10px" @bind-Value="@title" />
         <MudText Style="font-size: 16px">
             Дата начала эксплуатации:
         </MudText>
-        <MudTextField Format="yyyy-MM-dd" InputType="InputType.Date" T="DateTime" Variant="Variant.Text" Style="font-size: 16px; margin: 0; margin-bottom: 10px" @bind-Value="@dateBegin" />
+        <MudTextField Format="yyyy-MM-dd" InputType="InputType.Date"  T="DateTime" Variant="Variant.Text" Style="font-size: 16px; margin: 0; margin-bottom: 10px" @bind-Value="@dateBegin" />
         <MudText Style="font-size: 16px">
             Дата конца эксплуатации:
         </MudText>
@@ -45,7 +45,7 @@
         <MudText Style="font-size: 16px; margin: 0">
             Ответственный:
         </MudText>
-        <MudSelect T="String" @bind-Value="@workerLogin" Style="font-size: 16px; margin: 0">
+        <MudSelect  T="String" @bind-Value="@workerLogin" Style="font-size: 16px; margin: 0">
             @foreach (var worker in listOfUsers)
             {
                 <MudSelectItem Value="@worker.Surname">

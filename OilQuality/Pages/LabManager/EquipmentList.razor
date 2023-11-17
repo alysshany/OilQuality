@@ -31,18 +31,12 @@
                 <MudButton Variant="Variant.Outlined" Href="/managerEquipmentAdd">Добавить</MudButton>
             </ToolBarContent>
             <HeaderContent>
-@*                <MudTh>Номер</MudTh>*@
                 <MudTh>Название</MudTh>
-@*                <MudTh>Начало эксплуатации</MudTh>
-                <MudTh>Конец эксплуатации</MudTh>*@
                 <MudTh>Ответственный</MudTh>
                 <MudTh>Просмотреть</MudTh>
             </HeaderContent>
             <RowTemplate>
-@*                <MudTd DataLabel="Номер">@context.Id</MudTd>*@
                 <MudTd DataLabel="Название">@context.Title</MudTd>
-@*                <MudTd DataLabel="Начало эксплуатации">@context.DateBegin.ToShortDateString()</MudTd>
-                <MudTd DataLabel="Конец эксплуатации">@context.DateEnd.ToShortDateString()</MudTd>*@
                 <MudTd DataLabel="Ответственный">@context.User.Surname @context.User.Name</MudTd>
                 <MudTd DataLabel="Просмотреть"><MudButton Variant="Variant.Outlined" Color="Color.Info" OnClick="() => NavigationToEquipmentInfo(context.Title)">Просмотр</MudButton></MudTd>
             </RowTemplate>

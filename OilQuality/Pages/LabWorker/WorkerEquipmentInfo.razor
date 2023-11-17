@@ -3,6 +3,7 @@
 @using OilQuality.Data;
 @inject ISnackbar Snackbar
 @inject NavigationManager navigation;
+@inject CurrentUser currentUser;
 
 <MudAppBar Style="margin-top: 2%; position: absolute; width: 90%; left: 50%; transform: translate(-50%, 0); background-color: white; box-shadow: rgb(38, 57, 77) 0px 20px 30px -10px;">
     <div Class="d-flex mx-auto">
@@ -33,19 +34,19 @@
         <MudText Style="font-size: 16px">
             Наименование:
         </MudText>
-        <MudTextField T="String" Variant="Variant.Text" Style="font-size: 16px; margin: 0; margin-bottom: 10px" @bind-Value="@title" />
+        <MudTextField T="String" Variant="Variant.Text" Disabled="!newOne" Style="font-size: 16px; margin: 0; margin-bottom: 10px" @bind-Value="@title" />
         <MudText Style="font-size: 16px">
             Дата начала эксплуатации:
         </MudText>
-        <MudTextField T="DateTime" Variant="Variant.Text" Style="font-size: 16px; margin: 0; margin-bottom: 10px" @bind-Value="@dateBegin" />
+        <MudTextField T="DateTime" Variant="Variant.Text" Disabled="!newOne" Style="font-size: 16px; margin: 0; margin-bottom: 10px" @bind-Value="@dateBegin" />
         <MudText Style="font-size: 16px">
             Дата конца эксплуатации:
         </MudText>
-        <MudTextField T="DateTime" Variant="Variant.Text" Style=" font-size: 16px; margin: 0; margin-bottom: 10px " @bind-Value="@dateEnd" />
+        <MudTextField T="DateTime" Variant="Variant.Text" Disabled="!newOne" Style=" font-size: 16px; margin: 0; margin-bottom: 10px " @bind-Value="@dateEnd" />
         <MudText Style="font-size: 16px; margin: 0">
             Ответсвенный:
         </MudText>
-        <MudSelect T="String" @bind-Value="@workerLogin" Style="font-size: 16px; margin: 0; margin-bottom: 10px">
+        <MudSelect T="String" @bind-Value="@workerLogin" Disabled="!newOne" Style="font-size: 16px; margin: 0; margin-bottom: 10px">
             @foreach (var worker in listOfUsers)
             {
                 <MudSelectItem Value="@worker.Surname">
@@ -54,18 +55,19 @@
             }
         </MudSelect>
         <br />
-        @if (!newOne)
+        @if (!newOne && workerLogin == currentUser.CurrentUserData.Login)
         {
-            <div Class="d-flex mx-auto" style="display: inline-block;">
+            <MudButton Variant="Variant.Outlined" Color="Color.Info" Class="d-flex mx-auto" Style="margin: 15px" @onclick="DeletingEquipment">
+                Удалить
+            </MudButton>
+@*            <div Class="d-flex mx-auto" style="display: inline-block;">
                 <MudButton Variant="Variant.Outlined" Color="Color.Info" Class="d-flex mx-auto" Style="margin: 15px" @onclick="RegistrationEquip">
                     Сохранить
                 </MudButton>
-                <MudButton Variant="Variant.Outlined" Color="Color.Info" Class="d-flex mx-auto" Style="margin: 15px" @onclick="DeletingEquipment">
-                    Удалить
-                </MudButton>
-            </div>
+                
+            </div>*@
         }
-        else
+        else if (newOne)
         {
             <MudButton Variant="Variant.Outlined" Color="Color.Info" Class="d-flex mx-auto" Style="margin: 15px" @onclick="RegistrationEquip">
                 Сохранить

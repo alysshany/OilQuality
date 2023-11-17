@@ -30,13 +30,13 @@
                 <MudSpacer />
             </ToolBarContent>
             <HeaderContent>
-                <MudTh>Номер</MudTh>
+                <MudTh>Наименование</MudTh>
                 <MudTh>Тип</MudTh>
                 <MudTh>Месторождение</MudTh>
                 <MudTh>Просмотреть</MudTh>
             </HeaderContent>
             <RowTemplate>
-                <MudTd DataLabel="Номер">@context.Title</MudTd>
+                <MudTd DataLabel="Наименование">@context.Title</MudTd>
                 <MudTd DataLabel="Тип">@context.Type</MudTd>
                 <MudTd DataLabel="Месторождение">@context.Deposit</MudTd>
                 <MudTd DataLabel="Просмотреть"><MudButton Variant="Variant.Outlined" Color="Color.Info" OnClick="() => NavigationToAnalyze(context.Title)">Просмотр</MudButton></MudTd>

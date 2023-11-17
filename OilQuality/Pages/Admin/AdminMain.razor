@@ -1,5 +1,6 @@
 ﻿@page "/admin"
 @using OilQuality.Data;
+@using Radzen.Blazor
 
 <MudAppBar Style="margin-top: 2%; position: absolute; width: 90%; left: 50%; transform: translate(-50%, 0); background-color: white; box-shadow: rgb(38, 57, 77) 0px 20px 30px -10px; ">
     <div Class="d-flex mx-auto">
@@ -18,14 +19,26 @@
         <img src='/css//Mesh-20.png' style="width: 100%; height:100%; object-fit: cover; overflow: hidden">
     </div>
     <div style="background-color: white; width: 49%; height: 49%; box-shadow: rgb(38, 57, 77) 0px 5px 10px -0px; align-items: center;  justify-content: center;">
-        <MudChart ChartType="ChartType.Donut" LegendPosition="Position.Right" Width="260px" Height="260px"
-                  InputData="@data" InputLabels="@labels">
-        </MudChart>
+        <RadzenChart ColorScheme="ColorScheme.Monochrome" Style="width: 100%; height: 100%; ">
+            <RadzenDonutSeries Data="@revenueTwo" CategoryProperty="UserRole" ValueProperty="CountOfUsers">
+                <TitleTemplate>
+                    <div class="rz-donut-content">
+                        <div>Пользователи</div>
+                    </div>
+                </TitleTemplate>
+            </RadzenDonutSeries>
+        </RadzenChart>
     </div>
     <div style="background-color: white; width: 49%; height: 49%; box-shadow: rgb(38, 57, 77) 0px 5px 10px -0px;">
-        <MudChart ChartType="ChartType.Donut" LegendPosition="Position.Left" Width="260px" Height="260px"
-                  InputData="@dataTwo" InputLabels="@labelsTwo">
-        </MudChart>
+        <RadzenChart ColorScheme="ColorScheme.Monochrome" Style="width: 100%; height: 100%; ">
+            <RadzenDonutSeries Data="@revenue" CategoryProperty="WorkersSurname" ValueProperty="CountOfAnalyze">
+                <TitleTemplate>
+                    <div class="rz-donut-content">
+                        <div>Анализы</div>
+                    </div>
+                </TitleTemplate>
+            </RadzenDonutSeries>
+        </RadzenChart>
     </div>
     <div style="width: 49%; height: 49%; box-shadow: rgb(38, 57, 77) 0px 5px 10px -0px;">
         <img src='/css//Mesh-20.png' style="width: 100%; height:100%; object-fit: cover; overflow: hidden">
@@ -43,6 +56,8 @@
 
     DateTime? date = null;
     string dateFormat = "dd.MM.yyyy";
+    List<DataItem> revenue = new List<DataItem>();
+    List<DataItemTwo> revenueTwo = new List<DataItemTwo>();
 
     public List<int> dataList = new List<int>();
     public List<string> labelsList = new List<string>();
@@ -66,39 +81,29 @@
         UpdateChart();
     }
 
+    class DataItem
+    {
+        public string WorkersSurname { get; set; }
+        public int CountOfAnalyze { get; set; }
+    }
+
+    class DataItemTwo
+    {
+        public string UserRole { get; set; }
+        public int CountOfUsers { get; set; }
+    }
+
     private void UpdateChart()
     {
-        dataList.Clear();
-        labelsList.Clear();
+        revenueTwo.Add(new DataItemTwo { UserRole = "Администратор", CountOfUsers = DBConnection.ImportOnlyAdmins().Count });
+        revenueTwo.Add(new DataItemTwo { UserRole = "Заведующий", CountOfUsers = DBConnection.ImportOnlyManagers().Count });
+        revenueTwo.Add(new DataItemTwo { UserRole = "Лаборант", CountOfUsers = DBConnection.ImportOnlyWorkers().Count });
 
-        labelsList.Add("Администратор");
-
-        dataList.Add(DBConnection.ImportOnlyAdmins().Count);
-
-        labelsList.Add("Заведующий");
-
-        dataList.Add(DBConnection.ImportOnlyManagers().Count);
-
-        labelsList.Add("Лаборант");
-
-        dataList.Add(DBConnection.ImportOnlyWorkers().Count);
-
-        data = dataList.ToArray().Select(Convert.ToDouble).ToArray();
-        labels = labelsList.ToArray();
-
-        dataListTwo.Clear();
-        labelsListTwo.Clear();
-
-        labelsListTwo.Add("Заявки");
-
-        dataListTwo.Add(requests);
-
-        labelsListTwo.Add("Анализы");
-
-        dataListTwo.Add(analyzes);
-
-        dataTwo = dataListTwo.ToArray().Select(Convert.ToDouble).ToArray();
-        labelsTwo = labelsListTwo.ToArray();
+        foreach (var worker in ListOfUsers)
+        {
+            List<Analyze> analyzes = DBConnection.ImportOnlyAnalyzesOfWorker(worker);
+            revenue.Add(new DataItem { WorkersSurname = worker.Surname, CountOfAnalyze = analyzes.Count });
+        }
     }
 }
 
